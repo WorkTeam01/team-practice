@@ -1,0 +1,57 @@
+name: CI - Tests y Validación
+
+on:
+  push:
+    branches: [ main, dev ]
+  pull_request:
+    branches: [ main, dev ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.8, 3.9, "3.10", "3.11", "3.12"]
+
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Configurar Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ matrix.python-version }}
+    
+    - name: Instalar dependencias
+      run: |
+        python -m pip install --upgrade pip
+        pip install pytest
+    
+    - name: Ejecutar tests con pytest
+      run: |
+        pytest test_calculator.py -v
+    
+    - name: Verificar sintaxis de Python
+      run: |
+        python -m py_compile calculator.py
+        python -m py_compile main.py
+        python -m py_compile test_calculator.py
+
+  code-quality:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Configurar Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.12'
+    
+    - name: Instalar herramientas de calidad
+      run: |
+        python -m pip install --upgrade pip
+        pip install flake8
+    
+    - name: Verificar estilo de código con flake8
+      run: |
+        # Ignorar algunas reglas menores para mantener simplicidad del proyecto educativo
+        flake8 --select=E9,F63,F7,F82 --max-line-length=88 *.py

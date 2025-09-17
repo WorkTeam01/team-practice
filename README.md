@@ -1,5 +1,7 @@
 # Team Practice - Flujo de Trabajo Colaborativo
 
+[![CI - Tests y Validación](https://github.com/WorkTeam01/team-practice/actions/workflows/ci.yml/badge.svg)](https://github.com/WorkTeam01/team-practice/actions/workflows/ci.yml)
+
 Este repositorio está diseñado para practicar y aprender el flujo de trabajo colaborativo en equipo usando **Python** como lenguaje principal, elegido por su facilidad de uso y aprendizaje.
 
 ## 🎯 Propósito del Proyecto
@@ -53,6 +55,15 @@ team-practice/
 - Crear Pull Request
 - Solicitar code review
 - Mergear después de aprobación
+
+### 🔒 Protección de Ramas
+Las ramas `main` y `dev` están **protegidas** y requieren:
+- ✅ Pull Request obligatorio (no push directo)
+- ✅ Aprobación de código (mínimo 1 reviewer en main)
+- ✅ Checks de CI/Tests pasando
+- ✅ Rama actualizada antes del merge
+
+Para más detalles, consulta: [Configuración de Protección](.github/BRANCH_PROTECTION.md)
 
 ## 📋 Convenciones
 

@@ -1,0 +1,22 @@
+# CODEOWNERS - Define ownership of code areas
+# More info: https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+
+# Global ownership - all members of WorkTeam01 are default owners
+* @WorkTeam01
+
+# Python source code - require review from team for core functionality
+*.py @WorkTeam01
+
+# Test files - ensure test quality and coverage
+test_*.py @WorkTeam01
+
+# Documentation - maintain clear and updated docs
+*.md @WorkTeam01
+.github/ @WorkTeam01
+
+# Configuration files - critical for CI/CD and project setup
+.github/workflows/ @WorkTeam01
+.gitignore @WorkTeam01
+
+# Core calculator functionality - extra careful review
+calculator.py @WorkTeam01
