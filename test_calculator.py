@@ -5,7 +5,7 @@ Para correr los tests: pytest test_calculator.py
 """
 
 import pytest
-from calculator import add, subtract, multiply, divide, power
+from calculator import add, subtract, multiply, divide, power, abs_value 
 
 
 def test_add():
@@ -45,3 +45,11 @@ def test_power():
     assert power(2, 3) == 8
     assert power(5, 0) == 1
     assert power(4, 0.5) == 2.0
+
+def test_abs_value():
+    """Test valor absoluto."""
+    assert abs_value(-5) == 5
+    assert abs_value(3) == 3
+    assert abs_value(-2.365) == 2.365
+    assert abs_value(-0.0) == 0.0
+    assert abs_value(0.0) == 5
