@@ -106,3 +106,25 @@ def power(base: float, exponent: float) -> float:
         1
     """
     return base ** exponent
+
+
+
+def valor_maximo(a: float, b: float) -> float:
+    """Devuelve el número mayor entre dos valores.
+
+    Args:
+        a: Primer número
+        b: Segundo número
+
+    Returns:
+        El número mayor entre a y b
+
+    Examples:
+        >>> valor_maximo(10, 5)
+        10
+        >>> valor_maximo(-2, 3)
+        3
+        >>> valor_maximo(4, 4)
+        4
+    """
+    return a if a > b else b
