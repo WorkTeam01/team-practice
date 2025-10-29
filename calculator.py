@@ -107,8 +107,6 @@ def power(base: float, exponent: float) -> float:
     """
     return base ** exponent
 
-
-
 def valor_maximo(a: float, b: float) -> float:
     """Devuelve el número mayor entre dos valores.
 
@@ -128,3 +126,17 @@ def valor_maximo(a: float, b: float) -> float:
         4
     """
     return a if a > b else b
+  
+def abs_value(a: float) -> float:
+    """Devuelve el módulo de un número.
+    Args:
+        a: Número del cual obtener el valor absoluto
+    Returns:
+        El valor absoluto de a
+    Examples:
+        >>> abs_value(-5)
+        5
+        >>> abs_value(3)
+        3 
+    """
+    return abs(a)
