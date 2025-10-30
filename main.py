@@ -5,8 +5,9 @@ Demuestra cómo usar los módulos del proyecto y cómo estructurar
 un punto de entrada principal.
 """
 
+import sys
+from calculator import add, subtract, multiply, divide, power
 
-from calculator import add, subtract, multiply, divide, power, valor_maximo, abs_value
 
 def main():
     """Función principal del programa."""
@@ -19,9 +20,7 @@ def main():
     print(f"10 - 4 = {subtract(10, 4)}")
     print(f"5 * 6 = {multiply(5, 6)}")
     print(f"15 / 3 = {divide(15, 3)}")
-    print(f"2 ^ 4 = {power(2, 4)}")
-    print(f"-7 abs = {abs_value(-7)}")
-    print(f"Valor máximo entre 10 y 20 = {valor_maximo(10, 20)}")
+    print(f"2^4 = {power(2, 4)}")
     
     # Ejemplo de manejo de errores
     print("\nEjemplo de manejo de errores:")
@@ -33,7 +32,7 @@ def main():
     
     # Calculadora interactiva simple
     print("\n=== Calculadora Interactiva ===")
-    print("Operaciones disponibles: +, -, *, /, ^, max")
+    print("Operaciones disponibles: +, -, *, /, ^")
     print("Escribe 'quit' para salir\n")
     
     while True:
@@ -46,47 +45,30 @@ def main():
             
             # Parse simple de la entrada
             parts = user_input.split()
-            
-            # Realizar la operación formato: "num1 + operador + num2"
-            if len(parts) == 3:
-
-                num1, operator, num2 = parts
-                num1, num2 = float(num1), float(num2)
-            
-                if operator == '+':
-                   result = add(num1, num2)
-                elif operator == '-':
-                    result = subtract(num1, num2)
-                elif operator == '*':
-                    result = multiply(num1, num2)
-                elif operator == '/':
-                    result = divide(num1, num2)
-                elif operator == '^':
-                    result = power(num1, num2)
-                elif operator == 'max':
-                    result = valor_maximo(num1, num2)
-                else:
-                    print(f"Operador '{operator}' no válido")
-                    continue
-                print(f"Resultado: {result}\n")
-                
-                
-            # Realizar la operación formato: "num + funcion"
-            elif len(parts) == 2:
-
-                num, function = parts
-                num = float(num)
-                
-                if function == 'abs':
-                   result = abs_value(num)
-                else:
-                   print(f"Función '{function}' no válida")
-                   continue
-                print(f"Resultado: {result}\n")
-            else:
-                print("Formato inválido")
+            if len(parts) != 3:
+                print("Formato inválido. Usa: número operador número")
                 continue
-                
+            
+            num1, operator, num2 = parts
+            num1, num2 = float(num1), float(num2)
+            
+            # Realizar la operación
+            if operator == '+':
+                result = add(num1, num2)
+            elif operator == '-':
+                result = subtract(num1, num2)
+            elif operator == '*':
+                result = multiply(num1, num2)
+            elif operator == '/':
+                result = divide(num1, num2)
+            elif operator == '^':
+                result = power(num1, num2)
+            else:
+                print(f"Operador '{operator}' no válido")
+                continue
+            
+            print(f"Resultado: {result}\n")
+            
         except ValueError:
             print("Error: Ingresa números válidos")
         except ZeroDivisionError as e:
@@ -97,7 +79,6 @@ def main():
         except Exception as e:
             print(f"Error inesperado: {e}")
 
-                
 
 if __name__ == "__main__":
     main()
