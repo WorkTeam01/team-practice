@@ -6,7 +6,7 @@ Para correr los tests: pytest test_calculator.py
 
 import pytest
 
-from calculator import add, subtract, multiply, divide, power, valor_maximo, abs_value
+from calculator import add, subtract, multiply, divide, power, valor_maximo, valor_minimo, abs_value
 
 
 
@@ -54,6 +54,13 @@ def test_valor_maximo():
     assert valor_maximo(-2, 3) == 3
     assert valor_maximo(4, 4) == 4
     assert valor_maximo(-10, -5) == -5
+    
+def test_valor_minimo():
+    assert valor_minimo(10, 5) == 5
+    assert valor_minimo(-2, 3) == -2
+    assert valor_minimo(4, 4) == 4
+    assert valor_minimo(-10, -5) == -10
+
 def test_abs_value():
     """Test valor absoluto."""
     assert abs_value(-5) == 5
