@@ -47,13 +47,12 @@ def main():
             # Parse simple de la entrada
             parts = user_input.split()
             
+            # Realizar la operación formato: "num1 + operador + num2"
             if len(parts) == 3:
-        
+
                 num1, operator, num2 = parts
                 num1, num2 = float(num1), float(num2)
             
-
-                # Realizar la operación formato: "num1 + operador + num2"
                 if operator == '+':
                    result = add(num1, num2)
                 elif operator == '-':
@@ -71,17 +70,20 @@ def main():
                     continue
                 print(f"Resultado: {result}\n")
                 
-                # Realizar la operación formato: "num + funcion"
+                
+            # Realizar la operación formato: "num + funcion"
             elif len(parts) == 2:
+
                 num, function = parts
                 num = float(num)
+                
                 if function == 'abs':
                    result = abs_value(num)
                 else:
                    print(f"Función '{function}' no válida")
                    continue
                 print(f"Resultado: {result}\n")
-             else:
+            else:
                 print("Formato inválido")
                 continue
                 

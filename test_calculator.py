@@ -60,4 +60,4 @@ def test_abs_value():
     assert abs_value(3) == 3
     assert abs_value(-2.365) == 2.365
     assert abs_value(-0.0) == 0.0
-    assert abs_value(0.0) == 5
+    assert abs_value(0.0) == 0
