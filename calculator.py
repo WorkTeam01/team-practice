@@ -126,6 +126,27 @@ def valor_maximo(a: float, b: float) -> float:
         4
     """
     return a if a > b else b
+
+def valor_minimo(a: float, b: float) -> float:
+    """Devuelve el número menor entre dos valores.
+
+    Args:
+        a: Primer número
+        b: Segundo número
+
+    Returns:
+        El número menor entre a y b
+
+    Examples:
+        >>> valor_minimo(10, 5)
+        5
+        >>> valor_minimo(-2, 3)
+        -2
+        >>> valor_minimo(4, 4)
+        4
+    """
+    return a if a < b else b
+  
   
 def abs_value(a: float) -> float:
     """Devuelve el módulo de un número.

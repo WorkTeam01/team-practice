@@ -6,7 +6,7 @@ un punto de entrada principal.
 """
 
 
-from calculator import add, subtract, multiply, divide, power, valor_maximo, abs_value
+from calculator import add, subtract, multiply, divide, power, valor_maximo, valor_minimo, abs_value
 
 def main():
     """Función principal del programa."""
@@ -22,6 +22,7 @@ def main():
     print(f"2 ^ 4 = {power(2, 4)}")
     print(f"-7 abs = {abs_value(-7)}")
     print(f"Valor máximo entre 10 y 20 = {valor_maximo(10, 20)}")
+    print(f"Valor mínimo entre 10 y 20 = {valor_minimo(10, 20)}")
     
     # Ejemplo de manejo de errores
     print("\nEjemplo de manejo de errores:")
@@ -33,7 +34,7 @@ def main():
     
     # Calculadora interactiva simple
     print("\n=== Calculadora Interactiva ===")
-    print("Operaciones disponibles: +, -, *, /, ^, max")
+    print("Operaciones disponibles: +, -, *, /, ^, max, min")
     print("Escribe 'quit' para salir\n")
     
     while True:
@@ -65,6 +66,8 @@ def main():
                     result = power(num1, num2)
                 elif operator == 'max':
                     result = valor_maximo(num1, num2)
+                elif operator == 'min':
+                    result = valor_minimo(num1, num2)
                 else:
                     print(f"Operador '{operator}' no válido")
                     continue
