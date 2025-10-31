@@ -5,7 +5,6 @@ Demuestra cómo usar los módulos del proyecto y cómo estructurar
 un punto de entrada principal.
 """
 
-
 from calculator import add, subtract, multiply, divide, power, valor_maximo, valor_minimo, abs_value
 
 def main():
@@ -74,7 +73,7 @@ def main():
                 print(f"Resultado: {result}\n")
                 
                 
-            # Realizar la operación formato: "num + funcion"
+                # Realizar la operación formato: "num + funcion"
             elif len(parts) == 2:
 
                 num, function = parts
@@ -89,7 +88,27 @@ def main():
             else:
                 print("Formato inválido")
                 continue
-                
+            
+            num1, operator, num2 = parts
+            num1, num2 = float(num1), float(num2)
+            
+            # Realizar la operación
+            if operator == '+':
+                result = add(num1, num2)
+            elif operator == '-':
+                result = subtract(num1, num2)
+            elif operator == '*':
+                result = multiply(num1, num2)
+            elif operator == '/':
+                result = divide(num1, num2)
+            elif operator == '^':
+                result = power(num1, num2)
+            else:
+                print(f"Operador '{operator}' no válido")
+                continue
+            
+            print(f"Resultado: {result}\n")
+            
         except ValueError:
             print("Error: Ingresa números válidos")
         except ZeroDivisionError as e:
@@ -100,7 +119,6 @@ def main():
         except Exception as e:
             print(f"Error inesperado: {e}")
 
-                
 
 if __name__ == "__main__":
     main()
