@@ -89,25 +89,6 @@ def main():
                 print("Formato inválido")
                 continue
             
-            num1, operator, num2 = parts
-            num1, num2 = float(num1), float(num2)
-            
-            # Realizar la operación
-            if operator == '+':
-                result = add(num1, num2)
-            elif operator == '-':
-                result = subtract(num1, num2)
-            elif operator == '*':
-                result = multiply(num1, num2)
-            elif operator == '/':
-                result = divide(num1, num2)
-            elif operator == '^':
-                result = power(num1, num2)
-            else:
-                print(f"Operador '{operator}' no válido")
-                continue
-            
-            print(f"Resultado: {result}\n")
             
         except ValueError:
             print("Error: Ingresa números válidos")
