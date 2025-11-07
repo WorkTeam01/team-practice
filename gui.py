@@ -25,24 +25,25 @@ class CalculatorGUI:
             relief='sunken',
             bd=3
         )
-        self.display.grid(row=0, column=0, columnspan=4, sticky='nsew', padx=5, pady=5)
+        self.display.grid(row=0, column=0, columnspan=4, sticky='nsew', padx=6, pady=6)
         
         # Estilo para los botones
         style = ttk.Style()
         # Un estilo simple para todos los botones
         style.configure('Calculator.TButton', 
                        font=('Arial', 14),
-                       padding=5)
+                       padding=6)
         
         # Definir botones y su posición
         buttons = [
             # Fila 1
-            ('C', 1, 0), ('abs', 1, 1), ('max', 1, 2), ('min', 1, 3),
+            ('C', 1, 0), ('(', 1, 1), (')', 1, 2), ('⌫', 1, 3),
             # Fila 2-5
-            ('7', 2, 0), ('8', 2, 1), ('9', 2, 2), ('/', 2, 3),
-            ('4', 3, 0), ('5', 3, 1), ('6', 3, 2), ('*', 3, 3),
-            ('1', 4, 0), ('2', 4, 1), ('3', 4, 2), ('-', 4, 3),
-            ('0', 5, 0), ('.', 5, 1), ('=', 5, 2), ('+', 5, 3)
+            ('max', 2, 0), ('min', 2, 1), ('abs', 2, 2), ('/', 2, 3),
+            ('7', 3, 0), ('8', 3, 1), ('9', 3, 2), ('*', 3, 3),
+            ('4', 4, 0), ('5', 4, 1), ('6', 4, 2), ('-', 4, 3),
+            ('1', 5, 0), ('2', 5, 1), ('3', 5, 2), ('+', 5, 3),
+            ('^', 6, 0), ('0', 6, 1), ('.', 6, 2), ('=', 6, 3)
         ]
         
         # Crear y posicionar botones
