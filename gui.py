@@ -6,6 +6,12 @@ class CalculatorGUI:
         self.root.title("Calculadora")
         self.root.geometry("330x420")
         self.root.configure(bg="#1E1E1E")  # Fondo más elegante
+       # Estado
+        self.current_value =  " " 
+        self.operator =  None
+        self.first_number =  None
+
+        # Interfaz de usuario
 
         self.create_widgets()
 
@@ -87,10 +93,30 @@ class CalculatorGUI:
         for i in range(4):
             self.root.grid_columnconfigure(i, weight=1)
 
+    def  botón_clic ( self , valor ):
+        """Maneja clicks de botones numéricos"""
+        pass
+
+
+    def  operación_clic ( self , op ):
+        """Maneja clics de operadores"""
+        pass
+
+
+    def  equals_click ( self ):
+        """Calcula el resultado usando calculadora.py"""
+        pass
+
+
+    def  clear_click ( self ):
+        """Exhibición de Limpia"""
+        pass
+
+
 
 def main():
     root = tk.Tk()
-    CalculatorGUI(root)
+    app = CalculatorGUI(root)  
     root.mainloop()
 
 if __name__ == "__main__":
