@@ -1,4 +1,5 @@
 import tkinter as tk
+from tkinter import ttk
 
 class CalculatorGUI:
     def __init__(self, root):
@@ -93,9 +94,31 @@ class CalculatorGUI:
         for i in range(4):
             self.root.grid_columnconfigure(i, weight=1)
 
-    def  botón_clic ( self , valor ):
-        """Maneja clicks de botones numéricos"""
-        pass
+        #Conectar botones a funciones
+        for (text, row, col, color) in buttons:
+            if text.isdigit():
+                btn = ttk.Button(
+                    self.root,
+                    text=text,
+                    style='Calculator.TButton',
+                    command=lambda t=text: self.number_button_click(t)
+                )
+                btn.grid(row=row, column=col, padx=2, pady=2, sticky='nsew')
+        
+
+    def number_button_click ( self , valor ):
+        """Maneja clicks de botones numéricos.
+        
+        Args:
+            value (str): Dígito presionado (0-9)
+        
+        Examples:
+            >>> # Usuario presiona 2, 3, 5
+            >>> # Display muestra: "235"
+        """
+        self.current_value += str(valor)
+        self.display.delete(0, tk.END)
+        self.display.insert(0, self.current_value)
 
 
     def  operación_clic ( self , op ):
