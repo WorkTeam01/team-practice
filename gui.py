@@ -1,4 +1,5 @@
 import tkinter as tk
+from tkinter import ttk
 
 class CalculatorGUI:
     def __init__(self, root):
@@ -6,13 +7,13 @@ class CalculatorGUI:
         self.root.title("Calculadora")
         self.root.geometry("330x420")
         self.root.configure(bg="#1E1E1E")  # Fondo más elegante
-       # Estado
-        self.current_value =  " " 
+        
+        # Estado
+        self.current_value =  "" 
         self.operator =  None
         self.first_number =  None
 
         # Interfaz de usuario
-
         self.create_widgets()
 
     def create_widgets(self):
@@ -74,6 +75,12 @@ class CalculatorGUI:
         ]
 
         for (txt, r, c, color) in buttons:
+            # Conectar solo botones numéricos
+            if txt.isdigit():
+                cmd = lambda t=txt: self.number_button_click(t)
+            else:
+                cmd = None  # Por ahora, otros botones sin funcionalidad
+            
             tk.Button(
                 self.root,
                 text=txt,
@@ -84,18 +91,31 @@ class CalculatorGUI:
                 bd=0,
                 activebackground=color,
                 activeforeground=COLORS["text"],
-                highlightthickness=0
+                highlightthickness=0,
+                command=cmd
             ).grid(row=r, column=c, padx=4, pady=4, sticky="nsew")
+
 
         # Expandir filas y columnas
         for i in range(7):
             self.root.grid_rowconfigure(i, weight=1)
         for i in range(4):
             self.root.grid_columnconfigure(i, weight=1)
+        
 
-    def  botón_clic ( self , valor ):
-        """Maneja clicks de botones numéricos"""
-        pass
+    def number_button_click ( self , valor ):
+        """Maneja clicks de botones numéricos.
+        
+        Args:
+            value (str): Dígito presionado (0-9)
+        
+        Examples:
+            >>> # Usuario presiona 2, 3, 5
+            >>> # Display muestra: "235"
+        """
+        self.current_value += str(valor)
+        self.display.delete(0, tk.END)
+        self.display.insert(0, self.current_value)
 
 
     def  operación_clic ( self , op ):
