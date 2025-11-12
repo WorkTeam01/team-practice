@@ -7,13 +7,13 @@ class CalculatorGUI:
         self.root.title("Calculadora")
         self.root.geometry("330x420")
         self.root.configure(bg="#1E1E1E")  # Fondo más elegante
-       # Estado
-        self.current_value =  " " 
+        
+        # Estado
+        self.current_value =  "" 
         self.operator =  None
         self.first_number =  None
 
         # Interfaz de usuario
-
         self.create_widgets()
 
     def create_widgets(self):
@@ -75,6 +75,12 @@ class CalculatorGUI:
         ]
 
         for (txt, r, c, color) in buttons:
+            # Conectar solo botones numéricos
+            if txt.isdigit():
+                cmd = lambda t=txt: self.number_button_click(t)
+            else:
+                cmd = None  # Por ahora, otros botones sin funcionalidad
+            
             tk.Button(
                 self.root,
                 text=txt,
@@ -85,25 +91,16 @@ class CalculatorGUI:
                 bd=0,
                 activebackground=color,
                 activeforeground=COLORS["text"],
-                highlightthickness=0
+                highlightthickness=0,
+                command=cmd
             ).grid(row=r, column=c, padx=4, pady=4, sticky="nsew")
+
 
         # Expandir filas y columnas
         for i in range(7):
             self.root.grid_rowconfigure(i, weight=1)
         for i in range(4):
             self.root.grid_columnconfigure(i, weight=1)
-
-        #Conectar botones a funciones
-        for (text, row, col, color) in buttons:
-            if text.isdigit():
-                btn = ttk.Button(
-                    self.root,
-                    text=text,
-                    style='Calculator.TButton',
-                    command=lambda t=text: self.number_button_click(t)
-                )
-                btn.grid(row=row, column=col, padx=2, pady=2, sticky='nsew')
         
 
     def number_button_click ( self , valor ):
