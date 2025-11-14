@@ -78,6 +78,8 @@ class CalculatorGUI:
             # Conectar solo botones numéricos
             if txt.isdigit():
                 cmd = lambda t=txt: self.number_button_click(t)
+            elif txt == '.':
+                cmd = self.decimal_click
             else:
                 cmd = None  # Por ahora, otros botones sin funcionalidad
             
@@ -116,6 +118,23 @@ class CalculatorGUI:
         self.current_value += str(valor)
         self.display.delete(0, tk.END)
         self.display.insert(0, self.current_value)
+    
+    def decimal_click(self):
+        """Maneja click del botón decimal.
+        
+        Agrega un punto decimal solo si no existe uno ya en el número actual.
+
+        Examples:
+            >>> "5" → click(.) → "5."
+            >>> "5." → click(.) → "5." (no cambia)
+            >>> "" → click(.) → "0."
+        """
+        if '.' not in self.current_value:
+            if not self.current_value:
+                self.current_value = "0"
+            self.current_value += '.'
+            self.display.delete(0, tk.END)
+            self.display.insert(0, self.current_value)
 
 
     def  operación_clic ( self , op ):
