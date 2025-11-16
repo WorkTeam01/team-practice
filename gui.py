@@ -1,5 +1,8 @@
 import tkinter as tk
-from tkinter import ttk
+from calculator import (
+                add, subtract, multiply, divide, power
+            )
+from tkinter import ttk  #esta linea esta de más?
 
 class CalculatorGUI:
     def __init__(self, root):
@@ -80,6 +83,10 @@ class CalculatorGUI:
                 cmd = lambda t=txt: self.number_button_click(t)
             elif txt == '.':
                 cmd = self.decimal_click
+            elif txt in ['+', '-', '*', '/', '^']:
+                cmd = lambda t=txt: self.operation_click(t)
+            elif txt == '=':
+                cmd = self.equals_click
             else:
                 cmd = None  # Por ahora, otros botones sin funcionalidad
             
@@ -97,7 +104,6 @@ class CalculatorGUI:
                 command=cmd
             ).grid(row=r, column=c, padx=4, pady=4, sticky="nsew")
 
-
         # Expandir filas y columnas
         for i in range(7):
             self.root.grid_rowconfigure(i, weight=1)
@@ -105,7 +111,7 @@ class CalculatorGUI:
             self.root.grid_columnconfigure(i, weight=1)
         
 
-    def number_button_click ( self , valor ):
+    def number_button_click (self , valor):
         """Maneja clicks de botones numéricos.
         
         Args:
@@ -119,6 +125,7 @@ class CalculatorGUI:
         self.display.delete(0, tk.END)
         self.display.insert(0, self.current_value)
     
+
     def decimal_click(self):
         """Maneja click del botón decimal.
         
@@ -137,17 +144,74 @@ class CalculatorGUI:
             self.display.insert(0, self.current_value)
 
 
-    def  operación_clic ( self , op ):
-        """Maneja clics de operadores"""
-        pass
+    def operation_click(self, operation):
+        """Maneja clicks de operadores matemáticos.
+    
+        Guarda el primer número y operador para calcular cuando 
+        el usuario presione "=".
+        
+        Args:
+            operation (str): Operador (+, -, *, /, ^, max, min)
+        
+        Examples:
+            >>> # Usuario: 5 + 3 =
+            >>> # 1. Ingresa "5"
+            >>> # 2. Click "+": first_number=5, operator="+"
+            >>> # 3. Ingresa "3"  
+            >>> # 4. Click "=": calcula 5+3=8
+        """
+        if self.current_value:
+            # Si hay operación pendiente, calcularla primero
+            if self.first_number is not None and self.operator:
+                self.equals_click()
+            
+            self.first_number = float(self.current_value)
+            self.operator = operation
+            self.current_value = ""
 
 
-    def  equals_click ( self ):
-        """Calcula el resultado usando calculadora.py"""
-        pass
+    def equals_click(self):
+        """Calcula el resultado de la operación actual.
+        
+        Usa las funciones de calculator.py para realizar el cálculo.
+        
+        Examples:
+            >>> # Usuario: 5 + 3 =
+            >>> # first_number=5, operator="+", current_value="3"
+            >>> # Ejecuta: add(5, 3) = 8
+            >>> # Display: "8"
+        """
+        if self.current_value and self.first_number is not None and self.operator:
+            try:
+                second_number = float(self.current_value)
+                result = None
+                
+                if self.operator == '+':
+                    result = add(self.first_number, second_number)
+                elif self.operator == '-':
+                    result = subtract(self.first_number, second_number)
+                elif self.operator == '*':
+                    result = multiply(self.first_number, second_number)
+                elif self.operator == '/':
+                    result = divide(self.first_number, second_number)
+                elif self.operator == '^':
+                    result = power(self.first_number, second_number)
+                
+                self.display.delete(0, tk.END)
+                self.display.insert(0, str(result))
+                self.current_value = str(result)
+                self.first_number = None
+                self.operator = None
+                
+            except ZeroDivisionError:
+                self.display.delete(0, tk.END)
+                self.display.insert(0, "Error: División por 0")
+                self.current_value = ""
+                self.first_number = None
+                self.operator = None
 
 
-    def  clear_click ( self ):
+    def clear_click(self):
         """Exhibición de Limpia"""
         pass
 
