@@ -1,8 +1,7 @@
 import tkinter as tk
 from calculator import (
-                add, subtract, multiply, divide, power
+                add, subtract, multiply, divide, power, valor_maximo, valor_minimo, abs_value
             )
-from tkinter import ttk  #esta linea esta de más?
 
 class CalculatorGUI:
     def __init__(self, root):
@@ -87,6 +86,8 @@ class CalculatorGUI:
                 cmd = lambda t=txt: self.operation_click(t)
             elif txt == '=':
                 cmd = self.equals_click
+            elif txt in ['abs', 'max', 'min']:
+                cmd = lambda t=txt: self.scientific_click(t)
             else:
                 cmd = None  # Por ahora, otros botones sin funcionalidad
             
@@ -196,6 +197,10 @@ class CalculatorGUI:
                     result = divide(self.first_number, second_number)
                 elif self.operator == '^':
                     result = power(self.first_number, second_number)
+                elif self.operator == 'max':
+                    result = valor_maximo(self.first_number, second_number)
+                elif self.operator == 'min':
+                    result = valor_minimo(self.first_number, second_number)
                 
                 self.display.delete(0, tk.END)
                 self.display.insert(0, str(result))
@@ -214,6 +219,33 @@ class CalculatorGUI:
     def clear_click(self):
         """Exhibición de Limpia"""
         pass
+
+
+    def scientific_click(self, func):
+        """Maneja clicks de funciones científicas.
+        
+        Args:
+            func (str): Función científica (abs, max, min)
+        
+        Examples:
+            >>> # abs: Display "-5" → click "abs" → "5"
+            >>> # max: "10" → "max" → "20" → "=" → "20"
+        """
+        if func == 'abs':
+            # Función de 1 argumento: calcular inmediatamente
+            if self.current_value:
+                try:
+                    value = float(self.current_value)
+                    result = abs_value(value)
+                    self.display.delete(0, tk.END)
+                    self.display.insert(0, str(result))
+                    self.current_value = str(result)
+                except Exception as e:
+                    self.show_error(str(e))
+
+        elif func in ['max', 'min']:
+            # Funciones de 2 argumentos: funciona como operador
+            self.operation_click(func)        
 
 
 
