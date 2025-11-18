@@ -86,6 +86,10 @@ class CalculatorGUI:
                 cmd = lambda t=txt: self.operation_click(t)
             elif txt == '=':
                 cmd = self.equals_click
+            elif txt == 'C':
+                cmd = self.clear_click
+            elif txt == '⌫':
+                cmd = self.backspace_click
             elif txt in ['abs', 'max', 'min']:
                 cmd = lambda t=txt: self.scientific_click(t)
             else:
@@ -217,8 +221,41 @@ class CalculatorGUI:
 
 
     def clear_click(self):
-        """Exhibición de Limpia"""
-        pass
+        """Limpia completamente el display y resetea el estado de la calculadora.
+    
+    Resetea:
+        - current_value: cadena vacía
+        - operator: None
+        - first_number: None
+        - Display: vacío
+    
+    Examples:
+        >>> # Display muestra: "235"
+        >>> # Usuario presiona C
+        >>> # Display muestra: ""
+    """
+        self.current_value = ""
+        self.operator = None
+        self.first_number = None
+        self.display.delete(0, tk.END)
+
+
+    def backspace_click(self):
+        """Elimina el último carácter del display.
+        
+        Si el display está vacío, no hace nada.
+        
+        Examples:
+            >>> # Display muestra: "1234"
+            >>> # Usuario presiona ⌫
+            >>> # Display muestra: "123"
+            >>> # Usuario presiona ⌫ tres veces más
+            >>> # Display muestra: ""
+        """
+        if self.current_value:
+            self.current_value = self.current_value[:-1]
+            self.display.delete(0, tk.END)
+            self.display.insert(0, self.current_value)
 
 
     def scientific_click(self, func):
