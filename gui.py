@@ -264,7 +264,7 @@ class CalculatorGUI:
                 result = None
 
                 if func == 'abs':
-                    result = abs_value(self.first_number)
+                    result = abs_value(float(self.current_value))   
                 #elif func == 'cos':
 
                 self.display.delete(0, tk.END)
@@ -274,8 +274,11 @@ class CalculatorGUI:
                 self.operator = None
 
             except Exception as e:
-                self.show_error(str(e))
-
+                self.display.delete(0, tk.END)
+                self.display.insert(0, f"Error: {str(e)}")
+                self.current_value = ""
+                self.first_number = None
+                self.operator = None
 
     def scientific_click(self, func):
         """Maneja clicks de funciones científicas.
