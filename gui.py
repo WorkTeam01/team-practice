@@ -76,8 +76,8 @@ class CalculatorGUI:
             ('=', 6, 3, COLORS["equal"]),
         ]
 
+        # Conectar cada botón con su respectiva función
         for (txt, r, c, color) in buttons:
-            # Conectar solo botones numéricos
             if txt.isdigit():
                 cmd = lambda t=txt: self.number_button_click(t)
             elif txt == '.':
@@ -222,18 +222,18 @@ class CalculatorGUI:
 
     def clear_click(self):
         """Limpia completamente el display y resetea el estado de la calculadora.
-    
-    Resetea:
-        - current_value: cadena vacía
-        - operator: None
-        - first_number: None
-        - Display: vacío
-    
-    Examples:
-        >>> # Display muestra: "235"
-        >>> # Usuario presiona C
-        >>> # Display muestra: ""
-    """
+        
+        Resetea:
+            - current_value: cadena vacía
+            - operator: None
+            - first_number: None
+            - Display: vacío
+        
+        Examples:
+            >>> # Display muestra: "235"
+            >>> # Usuario presiona C
+            >>> # Display muestra: ""
+        """
         self.current_value = ""
         self.operator = None
         self.first_number = None
@@ -258,6 +258,25 @@ class CalculatorGUI:
             self.display.insert(0, self.current_value)
 
 
+    def unary_operation(self, func):
+        if self.current_value:
+            try:
+                result = None
+
+                if func == 'abs':
+                    result = abs_value(self.first_number)
+                #elif func == 'cos':
+
+                self.display.delete(0, tk.END)
+                self.display.insert(0, str(result))
+                self.current_value = str(result)
+                self.first_number = None
+                self.operator = None
+
+            except Exception as e:
+                self.show_error(str(e))
+
+
     def scientific_click(self, func):
         """Maneja clicks de funciones científicas.
         
@@ -268,20 +287,12 @@ class CalculatorGUI:
             >>> # abs: Display "-5" → click "abs" → "5"
             >>> # max: "10" → "max" → "20" → "=" → "20"
         """
-        if func == 'abs':
-            # Función de 1 argumento: calcular inmediatamente
-            if self.current_value:
-                try:
-                    value = float(self.current_value)
-                    result = abs_value(value)
-                    self.display.delete(0, tk.END)
-                    self.display.insert(0, str(result))
-                    self.current_value = str(result)
-                except Exception as e:
-                    self.show_error(str(e))
-
+        
+        # Funciones de 1 argumento se calculan inmediatamente
+        if func in ['abs', 'cos', 'sin', 'tan']:
+            self.unary_operation(func)
+        # Funciones de 2 argumentos usan la lógica de operación normal
         elif func in ['max', 'min']:
-            # Funciones de 2 argumentos: funciona como operador
             self.operation_click(func)        
 
 
