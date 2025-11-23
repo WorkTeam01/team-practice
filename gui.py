@@ -186,7 +186,14 @@ class CalculatorGUI:
             >>> # Ejecuta: add(5, 3) = 8
             >>> # Display: "8"
         """
-        if self.current_value and self.first_number is not None and self.operator:
+        if not self.current_value:
+            # Muestra error en el display y resetea el estado
+            self.show_error("Ingresa el segundo número")
+            return
+        
+        elif self.first_number is not None and self.operator:
+            # En caso de no haber operador o primer número, no hacer nada
+
             try:
                 second_number = float(self.current_value)
                 result = None
@@ -213,11 +220,11 @@ class CalculatorGUI:
                 self.operator = None
                 
             except ZeroDivisionError:
-                self.display.delete(0, tk.END)
-                self.display.insert(0, "Error: División por 0")
-                self.current_value = ""
-                self.first_number = None
-                self.operator = None
+                self.show_error("No se puede dividir por 0")
+                return
+            except Exception as e:
+                self.show_error(str(e))
+                return
 
 
     def clear_click(self):
@@ -258,6 +265,24 @@ class CalculatorGUI:
             self.display.insert(0, self.current_value)
 
 
+    def show_error(self, message):
+        """Muestra un mensaje de error en el display.
+        
+        Args:
+            message (str): Mensaje de error a mostrar
+        
+        Examples:
+            >>> self.show_error("División por 0")
+            >>> # Display: "Error: División por 0"
+        """
+        self.display.delete(0, tk.END)
+        self.display.insert(0, f"Error: {message}")
+        # Resetear estado
+        self.current_value = ""
+        self.first_number = None
+        self.operator = None
+
+
     def unary_operation(self, func):
         if self.current_value:
             try:
@@ -274,11 +299,7 @@ class CalculatorGUI:
                 self.operator = None
 
             except Exception as e:
-                self.display.delete(0, tk.END)
-                self.display.insert(0, f"Error: {str(e)}")
-                self.current_value = ""
-                self.first_number = None
-                self.operator = None
+                self.show_error(str(e))
 
     def scientific_click(self, func):
         """Maneja clicks de funciones científicas.
