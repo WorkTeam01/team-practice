@@ -1,5 +1,7 @@
 # Team Practice - Flujo de Trabajo Colaborativo
 
+[![CI](https://github.com/WorkTeam01/team-practice/actions/workflows/ci.yml/badge.svg)](https://github.com/WorkTeam01/team-practice/actions/workflows/ci.yml)
+
 Este repositorio está diseñado para practicar y aprender el flujo de trabajo colaborativo en equipo usando **Python** como lenguaje principal, elegido por su facilidad de uso y aprendizaje.
 
 ## 🎯 Propósito del Proyecto
@@ -99,13 +101,27 @@ docs: actualizar README con instrucciones de setup
 
 ## 🧪 Testing
 
+### Ejecutar pruebas localmente
+
 ```bash
 # Ejecutar todas las pruebas
-pytest test_calculator.py
+pytest -v
+
+# Ejecutar pruebas de un archivo específico
+pytest test_calculator.py -v
 
 # Ejecutar el programa principal
 python main.py
 ```
+
+### Integración Continua (CI)
+
+Este proyecto usa **GitHub Actions** para ejecutar automáticamente las pruebas en cada push y pull request. El badge de estado al inicio del README muestra si las pruebas están pasando.
+
+- ✅ **Verde**: Todas las pruebas pasan
+- ❌ **Rojo**: Hay pruebas fallando
+
+Para más detalles, revisa el archivo de configuración en `.github/workflows/ci.yml`
 
 ## 👥 Contribuir
 
