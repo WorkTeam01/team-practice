@@ -19,9 +19,12 @@ Este repositorio está diseñado para practicar y aprender el flujo de trabajo c
 - Git
 - Editor de código (VS Code recomendado)
 
-### Próximas Características
+### Características Implementadas
 
 - Interfaz gráfica con tkinter
+
+### Próximas Características
+
 - Más operaciones matemáticas
 - Historial de operaciones
 - Soporte para expresiones matemáticas complejas
@@ -43,9 +46,10 @@ pip install pytest
 
 ```
 team-practice/
-├── calculator.py        # Código fuente principal
-├── test_calculator.py   # Pruebas unitarias
+├── calculator.py       # Código fuente principal
+├── test_calculator.py  # Pruebas unitarias
 ├── main.py             # Programa principal
+├── gui.py              # Interfaz gráfica      
 ├── .gitignore          # Archivos ignorados por Git
 ├── .github/            # Configuración y templates de GitHub
 │   ├── ISSUE_TEMPLATE/ # Plantillas para issues
@@ -54,7 +58,7 @@ team-practice/
 │   └── REVIEW_COMMENTS.md      # Plantillas para comentarios de revisión
 ├── README.md           # Este archivo
 ├── CHANGELOG.md        # Historial de cambios
-└── LICENSE            # Licencia del proyecto
+└── LICENSE             # Licencia del proyecto
 ```
 
 ## 🤝 Flujo de Trabajo
@@ -112,6 +116,9 @@ pytest test_calculator.py -v
 
 # Ejecutar el programa principal
 python main.py
+
+# Ejecutar la interfaz gráfica
+python gui.py
 ```
 
 ### Integración Continua (CI)
