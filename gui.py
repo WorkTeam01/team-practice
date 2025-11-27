@@ -165,11 +165,65 @@ class CalculatorGUI:
             >>> # 3. Ingresa "3"  
             >>> # 4. Click "=": calcula 5+3=8
         """
-        if self.current_value:
-            # Si hay operación pendiente, calcularla primero
-            if self.first_number is not None and self.operator:
-                self.equals_click()
-            
+        # Si el usuario presiona '-' cuando no hay número iniciado, iniciamos un número negativo
+        # Manejar '-' como inicio de número negativo
+        if operation == '-' and (self.current_value == "" or self.current_value is None):
+            # Iniciamos la entrada de un número negativo
+            self.current_value = '-'
+            self.display.delete(0, tk.END)
+            self.display.insert(0, self.current_value)
+            return
+        if operation == '-' and self.current_value == '-':
+            # Evitar varios signos '-'
+            return
+
+        # Si no hay nada en el display y ya hay un primer número,
+        # permitimos cambiar el operador (por ejemplo: 5 + -> 5 -)
+        if not self.current_value:
+            if self.first_number is not None:
+                self.operator = operation
+            return
+
+        # A partir de aquí current_value contiene texto: validar una vez
+        try:
+            value = float(self.current_value)
+        except ValueError:
+            self.show_error("Número inválido")
+            return
+
+        # Si no hay primer número guardado, lo asignamos
+        if self.first_number is None:
+            self.first_number = value
+            self.operator = operation
+            self.current_value = ""
+            return
+
+        # Si ya hay primer número y operador, calculamos la operación pendiente
+        if self.first_number is not None and self.operator is not None:
+            # Guardamos el segundo número y ejecutamos equals
+            self.equals_click()
+            # equals_click deja el resultado en self.current_value
+            try:
+                self.first_number = float(self.current_value)
+            except ValueError:
+                self.show_error("Número inválido")
+                return
+            self.operator = operation
+            self.current_value = ""
+
+        elif self.current_value and self.first_number is None and self.operator is None:
+            self.first_number = float(self.current_value)
+            self.operator = operation
+            self.current_value = ""
+
+        elif self.first_number is not None and self.operator is not None and self.current_value:
+            # validar current_value antes de llamar equals_click
+            try:
+                float(self.current_value)
+            except ValueError:
+                self.show_error("Número inválido")
+                return
+            self.equals_click()
             self.first_number = float(self.current_value)
             self.operator = operation
             self.current_value = ""
@@ -186,12 +240,12 @@ class CalculatorGUI:
             >>> # Ejecuta: add(5, 3) = 8
             >>> # Display: "8"
         """
-        if not self.current_value:
+        if self.first_number is not None and self.operator is not None and not self.current_value:
             # Muestra error en el display y resetea el estado
             self.show_error("Ingresa el segundo número")
             return
         
-        elif self.first_number is not None and self.operator:
+        elif self.first_number is not None and self.operator is not None and self.current_value:
             # En caso de no haber operador o primer número, no hacer nada
 
             try:
@@ -285,6 +339,9 @@ class CalculatorGUI:
 
     def unary_operation(self, func):
         if self.current_value:
+            if self.current_value == "-":
+                self.show_error("Número incompleto")
+                return
             try:
                 result = None
 
