@@ -211,11 +211,6 @@ class CalculatorGUI:
             self.operator = operation
             self.current_value = ""
 
-        elif self.current_value and self.first_number is None and self.operator is None:
-            self.first_number = float(self.current_value)
-            self.operator = operation
-            self.current_value = ""
-
 
     def equals_click(self):
         """Calcula el resultado de la operación actual.
