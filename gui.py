@@ -33,7 +33,7 @@ class CalculatorGUI:
         }
 
         # Display principal
-        self.display = tk. Entry(
+        self.display = tk.Entry(
             self.root,
             font=("Arial", 28, "bold"),
             justify="right",
@@ -101,7 +101,7 @@ class CalculatorGUI:
             elif txt == 'C':
                 cmd = self.clear_click
             elif txt == '⌫':
-                cmd = self. backspace_click
+                cmd = self.backspace_click
             elif txt in ['abs', 'max', 'min']:
                 cmd = lambda t=txt: self.scientific_click(t)
             else:
@@ -119,7 +119,7 @@ class CalculatorGUI:
                 activeforeground=COLORS["text"],
                 highlightthickness=0,
                 command=cmd
-            ). grid(row=r, column=c, padx=4, pady=4, sticky="nsew")
+            ).grid(row=r, column=c, padx=4, pady=4, sticky="nsew")
 
         # Hacer que los botones se expandan con la ventana
         for i in range(8):
@@ -199,10 +199,10 @@ class CalculatorGUI:
             try:
                 float(self.current_value)
             except ValueError:
-                self. show_error("Número inválido")
+                self.show_error("Número inválido")
                 return
         
-        if '.' not in self. current_value:
+        if '.' not in self.current_value:
             if not self.current_value:
                 self.current_value = "0"
             self.current_value += '.'
@@ -250,7 +250,7 @@ class CalculatorGUI:
 
         # Guardar primer número
         if self.first_number is None:
-            self. first_number = value
+            self.first_number = value
             self.operator = operation
             self.current_value = ""
             return
@@ -288,7 +288,7 @@ class CalculatorGUI:
                 
                 if self.operator == '+':
                     result = add(self.first_number, second_number)
-                elif self. operator == '-':
+                elif self.operator == '-':
                     result = subtract(self.first_number, second_number)
                 elif self.operator == '*':
                     result = multiply(self.first_number, second_number)
@@ -422,7 +422,7 @@ class CalculatorGUI:
 
 
 def main():
-    root = tk. Tk()
+    root = tk.Tk()
     app = CalculatorGUI(root)  
     root.mainloop()
 
