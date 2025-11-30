@@ -185,29 +185,47 @@ class CalculatorGUI:
     
 
     def decimal_click(self):
-        """Maneja click del botón decimal. 
+        """Maneja click del botón decimal con validaciones mejoradas.
+    
+        Corrige casos como:
+            "-" + "." → "-0."
+            "-.3"     → "-0.3"
         
-        Agrega un punto decimal solo si no existe uno ya en el número actual.  
-
-        Examples:
-            >>> "5" → click(.) → "5."
-            >>> "5." → click(.) → "5." (no cambia)
-            >>> "" → click(.) → "0."
+        Previene:
+            "-." como número inválido.
         """
-        # Validar que current_value sea válido antes de agregar punto
-        if self.current_value and self.current_value != '-':
-            try:
-                float(self.current_value)
-            except ValueError:
-                self.show_error("Número inválido")
-                return
-        
-        if '.' not in self.current_value:
-            if not self.current_value:
-                self.current_value = "0"
-            self.current_value += '.'
+
+        # --- Caso 1: si el usuario presiona "." justo después de "-" ---
+        if self.current_value == "-":
+            # Autocompletar a -0.
+            self.current_value = "-0."
             self.display.delete(0, tk.END)
             self.display.insert(0, self.current_value)
+            return
+
+        # --- Caso 2: si no hay nada escrito, iniciar con "0." ---
+        if not self.current_value:
+            self.current_value = "0."
+            self.display.delete(0, tk.END)
+            self.display.insert(0, self.current_value)
+            return
+
+        # --- Caso 3: evitar doble punto ---
+        if '.' in self.current_value:
+            return
+
+        # --- Caso 4: validar número antes de agregar punto ---
+        try:
+            # Permitir cadenas como "5", "-3", "12"
+            float(self.current_value)
+        except ValueError:
+            self.show_error("Número inválido")
+            return
+
+        # --- Agregar el punto decimal ---
+        self.current_value += '.'
+        self.display.delete(0, tk.END)
+        self.display.insert(0, self.current_value)
 
 
     def operation_click(self, operation):
