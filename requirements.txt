@@ -1,0 +1,2 @@
+# Dependencias para desarrollo y testing
+pytest>=7.0.0

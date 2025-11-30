@@ -6,7 +6,7 @@ Para correr los tests: pytest test_calculator.py
 
 import pytest
 
-from calculator import add, subtract, multiply, divide, power, valor_maximo, valor_minimo, abs_value
+from src.calculator import add, subtract, multiply, divide, power, valor_maximo, valor_minimo, abs_value
 
 
 def test_add():

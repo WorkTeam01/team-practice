@@ -1,5 +1,13 @@
+"""Interfaz gráfica de usuario (GUI) para la calculadora.
+
+Este módulo implementa una calculadora con interfaz tkinter que incluye:
+- Operaciones básicas: suma, resta, multiplicación, división, potencia
+- Funciones científicas: valor absoluto, máximo, mínimo
+- Soporte para teclado y números negativos
+- Manejo de errores con mensajes visuales
+"""
 import tkinter as tk
-from calculator import (add, subtract, multiply, divide, power, valor_maximo, valor_minimo, abs_value)
+from .calculator import (add, subtract, multiply, divide, power, valor_maximo, valor_minimo, abs_value)
 
 class CalculatorGUI:
     def __init__(self, root):
