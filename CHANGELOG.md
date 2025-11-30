@@ -82,7 +82,7 @@ Este release marca una evolución significativa del proyecto, introduciendo una 
 
 - **Experiencia de usuario** con dos interfaces disponibles:
   - CLI (`main.py`): Interfaz de línea de comandos original
-  - GUI (`gui. py`): Interfaz gráfica moderna
+  - GUI (`gui.py`): Interfaz gráfica moderna
 - **Refactoring de lógica** redundante en manejo de operadores (#46)
 - **Manejo visual de errores** en la GUI
   - División por cero detectada y manejada
@@ -99,7 +99,7 @@ Este release marca una evolución significativa del proyecto, introduciendo una 
 - Fixtures de pytest con `autouse=True`
 - Mocks de componentes Tkinter para testing sin GUI
 - Workflow de GitHub Actions para CI/CD
-- Integración completa entre GUI y módulo `calculator. py`
+- Integración completa entre GUI y módulo `calculator.py`
 
 ### Mantenido
 

@@ -1,6 +1,6 @@
 # Team Practice - Calculadora con GUI 🧮✨
 
-[![CI/CD](https://github.com/WorkTeam01/team-practice/actions/workflows/ci. yml/badge.svg)](https://github.com/WorkTeam01/team-practice/actions/workflows/ci.yml)
+[![CI/CD](https://github.com/WorkTeam01/team-practice/actions/workflows/ci.yml/badge.svg)](https://github.com/WorkTeam01/team-practice/actions/workflows/ci.yml)
 [![Python 3.12+](https://img.shields.io/badge/python-3.12+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
@@ -120,16 +120,17 @@ team-practice/
 ├── test_calculator.py         # Tests unitarios de calculator. py
 ├── test_gui_calculator.py     # Tests de la interfaz gráfica
 ├── conftest.py                # Fixtures de pytest (mocks de Tkinter)
-├── . github/
+├── .github/
 │   ├── workflows/
 │   │   └── ci.yml            # Pipeline de CI/CD
 │   ├── ISSUE_TEMPLATE/       # Plantillas para issues
 │   ├── PULL_REQUEST_TEMPLATE/ # Plantillas para PRs
-│   └── pull_request_template.md
+│   ├── pull_request_template.md
+│   └── REVIEW_COMMENTS.md
 ├── README.md                  # Este archivo
 ├── CHANGELOG.md               # Historial de cambios
 ├── LICENSE                    # Licencia MIT
-└── . gitignore                 # Archivos ignorados por Git
+└── .gitignore                 # Archivos ignorados por Git
 ```
 
 ---
@@ -365,7 +366,7 @@ git branch -d feature/mi-rama
 ### Git y Flujo de Trabajo
 
 - [Git Flow Cheatsheet](https://danielkummer.github.io/git-flow-cheatsheet/)
-- [Conventional Commits](https://www.conventionalcommits. org/)
+- [Conventional Commits](https://www.conventionalcommits.org/)
 - [GitHub Flow](https://docs.github.com/en/get-started/quickstart/github-flow)
 
 ### Python
