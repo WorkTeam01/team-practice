@@ -1,3 +1,8 @@
+"""Configuración de pytest y fixtures para tests.
+
+Este módulo contiene fixtures y configuración compartida para todos los tests.
+Incluye mocks de componentes tkinter para ejecutar tests sin interfaz gráfica.
+"""
 import pytest
 import tkinter as tk
 
