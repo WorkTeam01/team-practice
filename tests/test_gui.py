@@ -4,7 +4,7 @@ Pruebas usando pytest para verificar funcionalidad de GUI.
 Para correr los tests: pytest test_gui_calculator.py -v
 """
 import tkinter as tk
-from gui import CalculatorGUI
+from src.gui import CalculatorGUI
 
 
 # ============================================================================
