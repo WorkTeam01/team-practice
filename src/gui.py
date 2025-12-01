@@ -7,7 +7,11 @@ Este módulo implementa una calculadora con interfaz tkinter que incluye:
 - Manejo de errores con mensajes visuales
 """
 import tkinter as tk
-from calculator import (add, subtract, multiply, divide, power, valor_maximo, valor_minimo, abs_value)
+
+try:
+    from .calculator import add, subtract, multiply, divide, power, valor_maximo, valor_minimo, abs_value
+except ImportError:
+    from calculator import add, subtract, multiply, divide, power, valor_maximo, valor_minimo, abs_value
 
 class CalculatorGUI:
     def __init__(self, root):
