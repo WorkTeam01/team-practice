@@ -4,7 +4,7 @@ Demuestra cómo usar los módulos del proyecto y cómo estructurar
 un punto de entrada principal.
 """
 
-from .calculator import add, subtract, multiply, divide, power, valor_maximo, valor_minimo, abs_value
+from calculator import add, subtract, multiply, divide, power, valor_maximo, valor_minimo, abs_value
 
 def main():
     """Función principal del programa."""
