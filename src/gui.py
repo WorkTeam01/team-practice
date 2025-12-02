@@ -202,6 +202,17 @@ class CalculatorGUI:
             >>> # Display muestra: "("
             >>> # use_expression_mode = True
         """
+        # Si hay algo en current_value o ya hay operación en curso, transferir a expression
+        if not self.use_expression_mode:
+            if self.first_number is not None:
+                self.expression = str(self.first_number)
+                if self.operator:
+                    self.expression += self.operator
+                if self.current_value:
+                    self.expression += self.current_value
+            elif self.current_value:
+                self.expression = self.current_value
+        
         self.use_expression_mode = True
         self.expression += '('
         self.display.delete(0, tk.END)
@@ -408,6 +419,7 @@ class CalculatorGUI:
                 self.display.insert(0, str(result))
                 
                 # Preparar para la siguiente operación
+                self.current_value = str(result)
                 self.expression = str(result)
                 self.use_expression_mode = False
                 
