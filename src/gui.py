@@ -1,12 +1,14 @@
-"""Interfaz gráfica de usuario (GUI) para la calculadora.
+"""Interfaz gráfica de usuario (GUI) para la calculadora. 
 
 Este módulo implementa una calculadora con interfaz tkinter que incluye:
 - Operaciones básicas: suma, resta, multiplicación, división, potencia
 - Funciones científicas: valor absoluto, máximo, mínimo
+- Soporte para paréntesis en expresiones matemáticas
 - Soporte para teclado y números negativos
 - Manejo de errores con mensajes visuales
 """
 import tkinter as tk
+import re
 
 try:
     from .calculator import add, subtract, multiply, divide, power, valor_maximo, valor_minimo, abs_value
@@ -20,15 +22,17 @@ class CalculatorGUI:
         self.root.geometry("330x450")
         self.root.configure(bg="#1E1E1E")
         
-        # Estado
-        self.current_value =  "" 
-        self.operator =  None
-        self.first_number =  None
+        # Variables de estado de la calculadora
+        self.expression = ""  # Guarda expresiones completas como "(2+3)*4"
+        self.current_value = ""
+        self.operator = None
+        self.first_number = None
+        self.use_expression_mode = False  # True cuando usamos paréntesis
 
-        # Interfaz de usuario
+        # Crear la interfaz
         self.create_widgets()
         
-        # Activar captura de teclado
+        # Habilitar el uso del teclado
         self.root.bind('<Key>', self.handle_keypress)
 
     def create_widgets(self):
@@ -114,6 +118,10 @@ class CalculatorGUI:
                 cmd = self.clear_click
             elif txt == '⌫':
                 cmd = self.backspace_click
+            elif txt == '(':
+                cmd = self.open_parenthesis_click
+            elif txt == ')':
+                cmd = self.close_parenthesis_click
             elif txt in ['abs', 'max', 'min']:
                 cmd = lambda t=txt: self.scientific_click(t)
             else:
@@ -141,9 +149,10 @@ class CalculatorGUI:
         
 
     def handle_keypress(self, event):
-        """Maneja las teclas presionadas por el usuario. 
+        """Maneja las teclas presionadas por el usuario.
         
-        Mapea las teclas del teclado a las funciones de la calculadora.
+        Mapea las teclas del teclado a las funciones de la calculadora,
+        incluyendo paréntesis.
         """
         key = event.char
         
@@ -163,6 +172,13 @@ class CalculatorGUI:
         elif key == '.':
             self.decimal_click()
         
+        # Paréntesis desde el teclado
+        elif key == '(':
+            self.open_parenthesis_click()
+        
+        elif key == ')':
+            self.close_parenthesis_click()
+        
         # Calcular (Enter o =)
         elif key in ['\r', '\n', '=']:
             self.equals_click()
@@ -176,65 +192,120 @@ class CalculatorGUI:
             self.backspace_click()
 
 
+    def open_parenthesis_click(self):
+        """Agrega un paréntesis de apertura a la expresión. 
+        
+        Activa el modo de expresión para evaluar con paréntesis.
+        
+        Examples:
+            >>> # Usuario presiona "("
+            >>> # Display muestra: "("
+            >>> # use_expression_mode = True
+        """
+        # Si hay algo en current_value o ya hay operación en curso, transferir a expression
+        if not self.use_expression_mode:
+            if self.first_number is not None:
+                self.expression = str(self.first_number)
+                if self.operator:
+                    self.expression += self.operator
+                if self.current_value:
+                    self.expression += self.current_value
+            elif self.current_value:
+                self.expression = self.current_value
+        
+        self.use_expression_mode = True
+        self.expression += '('
+        self.display.delete(0, tk.END)
+        self.display.insert(0, self.expression)
+
+
+    def close_parenthesis_click(self):
+        """Agrega un paréntesis de cierre a la expresión.
+        
+        Examples:
+            >>> # Expression: "(2+3"
+            >>> # Usuario presiona ")"
+            >>> # Display muestra: "(2+3)"
+        """
+        self.use_expression_mode = True
+        self.expression += ')'
+        self.display.delete(0, tk.END)
+        self.display.insert(0, self.expression)
+
+
     def number_button_click(self, valor):
         """Maneja clicks de botones numéricos.
         
+        Funciona tanto en modo normal como en modo de expresión con paréntesis.
+        
         Args:
-            value (str): Dígito presionado (0-9)
+            valor (str): Dígito presionado (0-9)
         
         Examples:
             >>> # Usuario presiona 2, 3, 5
             >>> # Display muestra: "235"
+            >>> # Con paréntesis: "(2+3)*5"
         """
-        # Validar que sea un dígito
+        # Asegurarnos de que es un número
         if not str(valor).isdigit():
             self.show_error("Número inválido")
             return
         
-        self.current_value += str(valor)
-        self.display.delete(0, tk.END)
-        self.display.insert(0, self.current_value)
+        if self.use_expression_mode:
+            self.expression += str(valor)
+            self.display.delete(0, tk.END)
+            self.display.insert(0, self.expression)
+        else:
+            self.current_value += str(valor)
+            self.display.delete(0, tk.END)
+            self.display.insert(0, self.current_value)
     
 
     def decimal_click(self):
         """Maneja click del botón decimal con validaciones mejoradas.
     
+        Funciona en modo normal y en modo de expresión con paréntesis.
+        
         Corrige casos como:
             "-" + "." → "-0."
             "-.3"     → "-0.3"
         
         Previene:
-            "-." como número inválido.
+            "-." como número inválido. 
         """
+        if self.use_expression_mode:
+            # Si estamos en modo expresión, solo agregamos el punto
+            self.expression += '.'
+            self.display.delete(0, tk.END)
+            self.display.insert(0, self.expression)
+            return
 
-        # --- Caso 1: si el usuario presiona "." justo después de "-" ---
+        # Si escribieron solo "-" y presionan ".", convertir a "-0."
         if self.current_value == "-":
-            # Autocompletar a -0.
             self.current_value = "-0."
             self.display.delete(0, tk.END)
             self.display.insert(0, self.current_value)
             return
 
-        # --- Caso 2: si no hay nada escrito, iniciar con "0." ---
+        # Si no hay nada, empezar con "0."
         if not self.current_value:
             self.current_value = "0."
             self.display.delete(0, tk.END)
             self.display.insert(0, self.current_value)
             return
 
-        # --- Caso 3: evitar doble punto ---
+        # No permitir más de un punto decimal
         if '.' in self.current_value:
             return
 
-        # --- Caso 4: validar número antes de agregar punto ---
+        # Verificar que lo que hay sea un número válido
         try:
-            # Permitir cadenas como "5", "-3", "12"
             float(self.current_value)
         except ValueError:
             self.show_error("Número inválido")
             return
 
-        # --- Agregar el punto decimal ---
+        # Todo bien, agregar el punto
         self.current_value += '.'
         self.display.delete(0, tk.END)
         self.display.insert(0, self.current_value)
@@ -243,6 +314,7 @@ class CalculatorGUI:
     def operation_click(self, operation):
         """Maneja clicks de operadores matemáticos.
     
+        Funciona en modo normal y en modo de expresión con paréntesis.
         Guarda el primer número y operador para calcular cuando 
         el usuario presione "=".
         
@@ -251,12 +323,21 @@ class CalculatorGUI:
         
         Examples:
             >>> # Usuario: 5 + 3 =
-            >>> # 1. Ingresa "5"
-            >>> # 2. Click "+": first_number=5, operator="+"
+            >>> # 1.Ingresa "5"
+            >>> # 2.Click "+": first_number=5, operator="+"
             >>> # 3.  Ingresa "3"  
-            >>> # 4. Click "=": calcula 5+3=8
+            >>> # 4.Click "=": calcula 5+3=8
+            >>> 
+            >>> # Con paréntesis: (2+3)*4
+            >>> # expression = "(2+3)*4"
         """
-        # Permitir números negativos si se presiona '-' al inicio
+        if self.use_expression_mode:
+            self.expression += operation
+            self.display.delete(0, tk.END)
+            self.display.insert(0, self.expression)
+            return
+
+        # Caso especial: permitir escribir números negativos
         if operation == '-' and (self.current_value == "" or self.current_value is None):
             self.current_value = '-'
             self.display.delete(0, tk.END)
@@ -265,27 +346,27 @@ class CalculatorGUI:
         if operation == '-' and self.current_value == '-':
             return
 
-        # Cambiar de operador si ya hay uno seleccionado
+        # Si cambiaron de opinión sobre el operador, actualizarlo
         if not self.current_value:
             if self.first_number is not None:
                 self.operator = operation
             return
 
-        # Validar que sea un número válido
+        # Verificar que lo ingresado sea un número válido
         try:
             value = float(self.current_value)
         except ValueError:
             self.show_error("Número inválido")
             return
 
-        # Guardar primer número
+        # Primera vez: guardar el número y el operador
         if self.first_number is None:
             self.first_number = value
             self.operator = operation
             self.current_value = ""
             return
 
-        # Calcular operación pendiente antes de la nueva
+        # Ya hay una operación pendiente, calcularla primero
         if self.first_number is not None and self.operator is not None:
             self.equals_click()
             try:
@@ -297,16 +378,60 @@ class CalculatorGUI:
             self.current_value = ""
 
     def equals_click(self):
-        """Calcula el resultado de la operación actual.
+        """Calcula el resultado de la operación o expresión actual.
         
-        Usa las funciones de calculator. py para realizar el cálculo.
+        Soporta dos modos:
+        1.Modo normal: operaciones simples con dos números
+        2.Modo expresión: expresiones completas con paréntesis
         
         Examples:
-            >>> # Usuario: 5 + 3 =
+            >>> # Modo normal: 5 + 3 =
             >>> # first_number=5, operator="+", current_value="3"
             >>> # Ejecuta: add(5, 3) = 8
             >>> # Display: "8"
+            >>> 
+            >>> # Modo expresión: (2+3)*4 =
+            >>> # expression = "(2+3)*4"
+            >>> # Evalúa: eval("(2+3)*4") = 20
+            >>> # Display: "20"
         """
+        # Si estamos en modo expresión (con paréntesis)
+        if self.use_expression_mode and self.expression:
+            try:
+                # Verificar que los paréntesis estén balanceados
+                if self.expression.count('(') != self.expression.count(')'):
+                    self.show_error('Paréntesis desbalanceados')
+                    return
+                
+                # Por seguridad, solo permitir números y operadores básicos
+                if not re.match(r'^[\d\s\+\-\*\/\^\(\)\.]+$', self.expression):
+                    self.show_error('Expresión inválida')
+                    return
+                
+                # Python usa ** para potencias, no ^
+                expr = self.expression.replace('^', '**')
+                
+                # Calcular el resultado
+                result = eval(expr)
+                
+                # Mostrar en pantalla
+                self.display.delete(0, tk.END)
+                self.display.insert(0, str(result))
+                
+                # Preparar para la siguiente operación
+                self.current_value = str(result)
+                self.expression = str(result)
+                self.use_expression_mode = False
+                
+            except ZeroDivisionError:
+                self.show_error("No se puede dividir por 0")
+            except SyntaxError:
+                self.show_error("Sintaxis incorrecta")
+            except Exception as e:
+                self.show_error("Error en la expresión")
+            return
+
+        # Modo normal (operaciones simples sin paréntesis)
         if self.first_number is not None and self.operator is not None and not self.current_value:
             self.show_error("Ingresa el segundo número")
             return
@@ -349,46 +474,61 @@ class CalculatorGUI:
 
 
     def clear_click(self):
-        """Limpia completamente el display y resetea el estado de la calculadora. 
+        """Limpia completamente el display y resetea el estado de la calculadora.
+        
+        Resetea tanto el modo normal como el modo de expresión. 
         
         Resetea:
             - current_value: cadena vacía
             - operator: None
             - first_number: None
+            - expression: cadena vacía
+            - use_expression_mode: False
             - Display: vacío
         
         Examples:
-            >>> # Display muestra: "235"
+            >>> # Display muestra: "(2+3)*4"
             >>> # Usuario presiona C
             >>> # Display muestra: ""
         """
         self.current_value = ""
         self.operator = None
         self.first_number = None
+        self.expression = ""
+        self.use_expression_mode = False
         self.display.delete(0, tk.END)
-        self.error_label.config(text="")  # Limpiar también el error
+        self.error_label.config(text="")  # Quitar cualquier mensaje de error
 
 
     def backspace_click(self):
         """Elimina el último carácter del display.
         
+        Funciona en modo normal y en modo de expresión. 
         Si el display está vacío, no hace nada.
         
         Examples:
             >>> # Display muestra: "1234"
             >>> # Usuario presiona ⌫
             >>> # Display muestra: "123"
-            >>> # Usuario presiona ⌫ tres veces más
-            >>> # Display muestra: ""
+            >>> # Display muestra: "(2+3)"
+            >>> # Usuario presiona ⌫
+            >>> # Display muestra: "(2+3"
         """
-        if self.current_value:
+        if self.use_expression_mode and self.expression:
+            self.expression = self.expression[:-1]
+            # Si ya no quedan paréntesis, volver al modo simple
+            if '(' not in self.expression and ')' not in self.expression:
+                self.use_expression_mode = False
+            self.display.delete(0, tk.END)
+            self.display.insert(0, self.expression)
+        elif self.current_value:
             self.current_value = self.current_value[:-1]
             self.display.delete(0, tk.END)
             self.display.insert(0, self.current_value)
 
 
     def show_error(self, message):
-        """Muestra un mensaje de error en el label de errores. 
+        """Muestra un mensaje de error en el label de errores.
         
         Args:
             message (str): Mensaje de error a mostrar
@@ -396,22 +536,36 @@ class CalculatorGUI:
         Examples:
             >>> self.show_error("División por 0")
             >>> # Label de error: "⚠️ División por 0"
+            >>> self.show_error("Paréntesis desbalanceados")
+            >>> # Label de error: "⚠️ Paréntesis desbalanceados"
         """
         self.error_label.config(text=f"⚠️ {message}")
         
-        # Limpiar error después de 3 segundos
+        # El mensaje desaparece solo después de 3 segundos
         self.root.after(3000, lambda: self.error_label.config(text=""))
         
-        # Resetear estado
+        # Limpiar todo para empezar de nuevo
         self.current_value = ""
         self.first_number = None
         self.operator = None
+        self.expression = ""
+        self.use_expression_mode = False
 
         # Limpiar el display también
         self.display.delete(0, tk.END)
 
 
     def unary_operation(self, func):
+        """Ejecuta operaciones unarias (que solo necesitan un número).
+        
+        Args:
+            func (str): Nombre de la función a ejecutar (abs, cos, sin, tan)
+        
+        Examples:
+            >>> # Display: "-5"
+            >>> # Usuario presiona "abs"
+            >>> # Display: "5"
+        """
         if self.current_value:
             if self.current_value == "-":
                 self.show_error("Número incompleto")
