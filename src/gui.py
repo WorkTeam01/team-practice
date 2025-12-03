@@ -331,6 +331,7 @@ class CalculatorGUI:
             >>> # Con paréntesis: (2+3)*4
             >>> # expression = "(2+3)*4"
         """
+        # Si estamos en modo expresión (con paréntesis)
         if self.use_expression_mode:
             self.expression += operation
             self.display.delete(0, tk.END)
@@ -462,9 +463,13 @@ class CalculatorGUI:
                 self.first_number = None
                 self.operator = None
                 
-            except ValueError:
-                self.show_error("Entrada inválida")
+            except ValueError as e:
+                if str(e) == "Raíz negativa":
+                    self.show_error("Raíz negativa")
+                else:
+                    self.show_error("Entrada inválida")
                 return
+            
             except ZeroDivisionError:
                 self.show_error("No se puede dividir por 0")
                 return
