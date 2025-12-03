@@ -105,6 +105,13 @@ def power(base: float, exponent: float) -> float:
         >>> power(5, 0)
         1
     """
+    
+    if base < 0 and exponent != 0:
+        inv_exp = 1 / exponent
+        if abs(inv_exp - round(inv_exp)) < 1e-10:
+            if round(inv_exp) % 2 == 0:
+                raise ValueError("Raíz negativa")
+
     return base ** exponent
 
 def valor_maximo(a: float, b: float) -> float:

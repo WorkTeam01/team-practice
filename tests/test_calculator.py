@@ -53,7 +53,8 @@ def test_power():
     assert power(-2, 3) == -8
     assert power(-2, 0) == 1
     assert power(-2, -3) == -0.125
-    # assert power(-4, 0.5) == -2.0, "Error: la raíz cuadrada de un número negativo no es real"
+    with pytest.raises(ValueError, match="Raíz negativa"):
+        power(-4, 0.5)
 
 
 def test_valor_maximo():
