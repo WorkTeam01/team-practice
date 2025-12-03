@@ -4,7 +4,7 @@ Pruebas usando pytest para verificar funcionalidad de GUI.
 Para correr los tests: pytest test_gui_calculator.py -v
 """
 import tkinter as tk
-from gui import CalculatorGUI
+from src.gui import CalculatorGUI
 
 
 # ============================================================================
@@ -508,6 +508,511 @@ def test_valor_minimo():
     calc.number_button_click("7")
     calc.equals_click()
     assert float(calc.current_value) == 7.0
+
+    root.destroy()
+
+
+# ============================================================================
+# TESTS DE PARÉNTESISS
+# ============================================================================
+
+def test_parenthesis_basic():
+    """Test de operaciones básicas con paréntesis."""
+    root = tk.Tk()
+    calc = CalculatorGUI(root)
+
+    # Caso 1: (2+3)*4 = 20
+    calc.open_parenthesis_click()
+    calc.number_button_click("2")
+    calc.operation_click("+")
+    calc.number_button_click("3")
+    calc.close_parenthesis_click()
+    calc.operation_click("*")
+    calc.number_button_click("4")
+    calc.equals_click()
+    assert float(calc.current_value) == 20.0
+
+    calc.clear_click()
+
+    # Caso 2: 2*(3+4) = 14
+    calc.number_button_click("2")
+    calc.operation_click("*")
+    calc.open_parenthesis_click()
+    calc.number_button_click("3")
+    calc.operation_click("+")
+    calc.number_button_click("4")
+    calc.close_parenthesis_click()
+    calc.equals_click()
+    assert float(calc.current_value) == 14.0
+
+    calc.clear_click()
+
+    # Caso 3: (5-2)*(6+4) = 30
+    calc.open_parenthesis_click()
+    calc.number_button_click("5")
+    calc.operation_click("-")
+    calc.number_button_click("2")
+    calc.close_parenthesis_click()
+    calc.operation_click("*")
+    calc.open_parenthesis_click()
+    calc.number_button_click("6")
+    calc.operation_click("+")
+    calc.number_button_click("4")
+    calc.close_parenthesis_click()
+    calc.equals_click()
+    assert float(calc.current_value) == 30.0
+
+    calc.clear_click()
+
+    # Caso 4: (10/2)+5 = 10
+    calc.open_parenthesis_click()
+    calc.number_button_click("1")
+    calc.number_button_click("0")
+    calc.operation_click("/")
+    calc.number_button_click("2")
+    calc.close_parenthesis_click()
+    calc.operation_click("+")
+    calc.number_button_click("5")
+    calc.equals_click()
+    assert float(calc.current_value) == 10.0
+
+    root.destroy()
+
+
+def test_parenthesis_nested():
+    """Test de paréntesis anidados."""
+    root = tk.Tk()
+    calc = CalculatorGUI(root)
+
+    # Caso 1: ((2+3)*4)/5 = 4
+    calc.open_parenthesis_click()
+    calc.open_parenthesis_click()
+    calc.number_button_click("2")
+    calc.operation_click("+")
+    calc.number_button_click("3")
+    calc.close_parenthesis_click()
+    calc.operation_click("*")
+    calc.number_button_click("4")
+    calc.close_parenthesis_click()
+    calc.operation_click("/")
+    calc.number_button_click("5")
+    calc.equals_click()
+    assert float(calc.current_value) == 4.0
+
+    calc.clear_click()
+
+    # Caso 2: (2+(3*4)) = 14
+    calc.open_parenthesis_click()
+    calc.number_button_click("2")
+    calc.operation_click("+")
+    calc.open_parenthesis_click()
+    calc.number_button_click("3")
+    calc.operation_click("*")
+    calc.number_button_click("4")
+    calc.close_parenthesis_click()
+    calc.close_parenthesis_click()
+    calc.equals_click()
+    assert float(calc.current_value) == 14.0
+
+    calc.clear_click()
+
+    # Caso 3: ((10-5)*2)+3 = 13
+    calc.open_parenthesis_click()
+    calc.open_parenthesis_click()
+    calc.number_button_click("1")
+    calc.number_button_click("0")
+    calc.operation_click("-")
+    calc.number_button_click("5")
+    calc.close_parenthesis_click()
+    calc.operation_click("*")
+    calc.number_button_click("2")
+    calc.close_parenthesis_click()
+    calc.operation_click("+")
+    calc.number_button_click("3")
+    calc.equals_click()
+    assert float(calc.current_value) == 13.0
+
+    root.destroy()
+
+
+def test_parenthesis_with_decimals():
+    """Test de paréntesis con números decimales."""
+    root = tk.Tk()
+    calc = CalculatorGUI(root)
+
+    # Caso 1: (2.5+3.5)*2 = 12
+    calc.open_parenthesis_click()
+    calc.number_button_click("2")
+    calc.decimal_click()
+    calc.number_button_click("5")
+    calc.operation_click("+")
+    calc.number_button_click("3")
+    calc.decimal_click()
+    calc.number_button_click("5")
+    calc.close_parenthesis_click()
+    calc.operation_click("*")
+    calc.number_button_click("2")
+    calc.equals_click()
+    assert float(calc.current_value) == 12.0
+
+    calc.clear_click()
+
+    # Caso 2: (10.5/2)+1.5 = 6.75
+    calc.open_parenthesis_click()
+    calc.number_button_click("1")
+    calc.number_button_click("0")
+    calc.decimal_click()
+    calc.number_button_click("5")
+    calc.operation_click("/")
+    calc.number_button_click("2")
+    calc.close_parenthesis_click()
+    calc.operation_click("+")
+    calc.number_button_click("1")
+    calc.decimal_click()
+    calc.number_button_click("5")
+    calc.equals_click()
+    assert float(calc.current_value) == 6.75
+
+    root.destroy()
+
+
+def test_parenthesis_with_negatives():
+    """Test de paréntesis con números negativos."""
+    root = tk.Tk()
+    calc = CalculatorGUI(root)
+
+    # Caso 1: (-5+3)*2 = -4
+    calc.open_parenthesis_click()
+    calc.operation_click("-")
+    calc.number_button_click("5")
+    calc.operation_click("+")
+    calc.number_button_click("3")
+    calc.close_parenthesis_click()
+    calc.operation_click("*")
+    calc.number_button_click("2")
+    calc.equals_click()
+    assert float(calc.current_value) == -4.0
+
+    calc.clear_click()
+
+    # Caso 2: (10-15)*2 = -10
+    calc.open_parenthesis_click()
+    calc.number_button_click("1")
+    calc.number_button_click("0")
+    calc.operation_click("-")
+    calc.number_button_click("1")
+    calc.number_button_click("5")
+    calc.close_parenthesis_click()
+    calc.operation_click("*")
+    calc.number_button_click("2")
+    calc.equals_click()
+    assert float(calc.current_value) == -10.0
+
+    root.destroy()
+
+
+def test_parenthesis_with_power():
+    """Test de paréntesis con potencias."""
+    root = tk.Tk()
+    calc = CalculatorGUI(root)
+
+    # Caso 1: (2+3)^2 = 25
+    calc.open_parenthesis_click()
+    calc.number_button_click("2")
+    calc.operation_click("+")
+    calc.number_button_click("3")
+    calc.close_parenthesis_click()
+    calc.operation_click("^")
+    calc.number_button_click("2")
+    calc.equals_click()
+    assert float(calc.current_value) == 25.0
+
+    calc.clear_click()
+
+    # Caso 2: 2^(3+1) = 16
+    calc.number_button_click("2")
+    calc.operation_click("^")
+    calc.open_parenthesis_click()
+    calc.number_button_click("3")
+    calc.operation_click("+")
+    calc.number_button_click("1")
+    calc.close_parenthesis_click()
+    calc.equals_click()
+    assert float(calc.current_value) == 16.0
+
+    root.destroy()
+
+
+def test_parenthesis_unbalanced():
+    """Test de validación de paréntesis desbalanceados."""
+    root = tk.Tk()
+    calc = CalculatorGUI(root)
+
+    # Caso 1: Falta paréntesis de cierre: (2+3
+    calc.open_parenthesis_click()
+    calc.number_button_click("2")
+    calc.operation_click("+")
+    calc.number_button_click("3")
+    calc.equals_click()
+
+    # Debe mostrar error y limpiar
+    assert calc.current_value == ""
+    assert calc.expression == ""
+    assert calc.use_expression_mode == False
+
+    calc.clear_click()
+
+    # Caso 2: Falta paréntesis de apertura: 2+3)
+    calc.number_button_click("2")
+    calc.operation_click("+")
+    calc.number_button_click("3")
+    calc.close_parenthesis_click()
+    calc.equals_click()
+
+    # Debe mostrar error y limpiar
+    assert calc.current_value == ""
+    assert calc.expression == ""
+
+    root.destroy()
+
+
+def test_parenthesis_expression_mode():
+    """Test de activación del modo de expresión."""
+    root = tk.Tk()
+    calc = CalculatorGUI(root)
+
+    # Inicialmente no está en modo expresión
+    assert calc.use_expression_mode == False
+    assert calc.expression == ""
+
+    # Al presionar paréntesis de apertura, se activa
+    calc.open_parenthesis_click()
+    assert calc.use_expression_mode == True
+    assert calc.expression == "("
+
+    # Continuar agregando a la expresión
+    calc.number_button_click("5")
+    assert calc.expression == "(5"
+
+    calc.operation_click("+")
+    assert calc.expression == "(5+"
+
+    calc.number_button_click("3")
+    assert calc.expression == "(5+3"
+
+    calc.close_parenthesis_click()
+    assert calc.expression == "(5+3)"
+
+    # Calcular
+    calc.equals_click()
+    assert float(calc.current_value) == 8.0
+
+    # Después de calcular, se desactiva el modo expresión
+    assert calc.use_expression_mode == False
+
+    root.destroy()
+
+
+def test_parenthesis_clear():
+    """Test de limpiar expresiones con paréntesis."""
+    root = tk.Tk()
+    calc = CalculatorGUI(root)
+
+    # Construir expresión
+    calc.open_parenthesis_click()
+    calc.number_button_click("2")
+    calc.operation_click("+")
+    calc.number_button_click("3")
+    calc.close_parenthesis_click()
+
+    assert calc.use_expression_mode == True
+    assert calc.expression == "(2+3)"
+
+    # Limpiar
+    calc.clear_click()
+
+    # Todo debe estar limpio
+    assert calc.current_value == ""
+    assert calc.expression == ""
+    assert calc.use_expression_mode == False
+    assert calc.operator is None
+    assert calc.first_number is None
+
+    root.destroy()
+
+
+def test_parenthesis_backspace():
+    """Test de borrar caracteres en expresiones con paréntesis."""
+    root = tk.Tk()
+    calc = CalculatorGUI(root)
+
+    # Construir expresión: (2+3)
+    calc.open_parenthesis_click()
+    calc.number_button_click("2")
+    calc.operation_click("+")
+    calc.number_button_click("3")
+    calc.close_parenthesis_click()
+
+    assert calc.expression == "(2+3)"
+
+    # Borrar caracteres
+    calc.backspace_click()
+    assert calc.expression == "(2+3"
+
+    calc.backspace_click()
+    assert calc.expression == "(2+"
+
+    calc.backspace_click()
+    assert calc.expression == "(2"
+
+    calc.backspace_click()
+    assert calc.expression == "("
+
+    calc.backspace_click()
+    assert calc.expression == ""
+
+    # Al borrar todos los paréntesis, debe salir del modo expresión
+    assert calc.use_expression_mode == False
+
+    root.destroy()
+
+
+def test_parenthesis_display_update():
+    """Test de que el display se actualiza correctamente con paréntesis."""
+    root = tk.Tk()
+    calc = CalculatorGUI(root)
+
+    # Construir expresión y verificar que el display se actualiza
+    calc.open_parenthesis_click()
+    display_value = calc.display.get()
+    assert display_value == "("
+
+    calc.number_button_click("5")
+    display_value = calc.display.get()
+    assert display_value == "(5"
+
+    calc.operation_click("+")
+    display_value = calc.display.get()
+    assert display_value == "(5+"
+
+    calc.number_button_click("3")
+    display_value = calc.display.get()
+    assert display_value == "(5+3"
+
+    calc.close_parenthesis_click()
+    display_value = calc.display.get()
+    assert display_value == "(5+3)"
+
+    calc.equals_click()
+    display_value = calc.display.get()
+    assert display_value == "8.0" or display_value == "8"
+
+    root.destroy()
+
+
+def test_parenthesis_mixed_mode():
+    """Test de compatibilidad entre modo normal y modo expresión."""
+    root = tk.Tk()
+    calc = CalculatorGUI(root)
+
+    # Operación normal: 5 + 3 = 8
+    calc.number_button_click("5")
+    calc.operation_click("+")
+    calc.number_button_click("3")
+    calc.equals_click()
+    assert float(calc.current_value) == 8.0
+
+    calc.clear_click()
+
+    # Ahora con paréntesis: (5+3)*2 = 16
+    calc.open_parenthesis_click()
+    calc.number_button_click("5")
+    calc.operation_click("+")
+    calc.number_button_click("3")
+    calc.close_parenthesis_click()
+    calc.operation_click("*")
+    calc.number_button_click("2")
+    calc.equals_click()
+    assert float(calc.current_value) == 16.0
+
+    calc.clear_click()
+
+    # De nuevo modo normal: 10 - 2 = 8
+    calc.number_button_click("1")
+    calc.number_button_click("0")
+    calc.operation_click("-")
+    calc.number_button_click("2")
+    calc.equals_click()
+    assert float(calc.current_value) == 8.0
+
+    root.destroy()
+
+
+def test_parenthesis_complex_expression():
+    """Test de expresiones complejas con múltiples operadores."""
+    root = tk.Tk()
+    calc = CalculatorGUI(root)
+
+    # Caso 1: ((2+3)*(4-1))/5 = 3
+    calc.open_parenthesis_click()
+    calc.open_parenthesis_click()
+    calc.number_button_click("2")
+    calc.operation_click("+")
+    calc.number_button_click("3")
+    calc.close_parenthesis_click()
+    calc.operation_click("*")
+    calc.open_parenthesis_click()
+    calc.number_button_click("4")
+    calc.operation_click("-")
+    calc.number_button_click("1")
+    calc.close_parenthesis_click()
+    calc.close_parenthesis_click()
+    calc.operation_click("/")
+    calc.number_button_click("5")
+    calc.equals_click()
+    assert float(calc.current_value) == 3.0
+
+    calc.clear_click()
+
+    # Caso 2: (10/(2+3))*4 = 8
+    calc.open_parenthesis_click()
+    calc.number_button_click("1")
+    calc.number_button_click("0")
+    calc.operation_click("/")
+    calc.open_parenthesis_click()
+    calc.number_button_click("2")
+    calc.operation_click("+")
+    calc.number_button_click("3")
+    calc.close_parenthesis_click()
+    calc.close_parenthesis_click()
+    calc.operation_click("*")
+    calc.number_button_click("4")
+    calc.equals_click()
+    assert float(calc.current_value) == 8.0
+
+    root.destroy()
+
+
+def test_parenthesis_division_by_zero():
+    """Test de división por cero dentro de paréntesis."""
+    root = tk.Tk()
+    calc = CalculatorGUI(root)
+
+    # (10/0)+5 debe dar error
+    calc.open_parenthesis_click()
+    calc.number_button_click("1")
+    calc.number_button_click("0")
+    calc.operation_click("/")
+    calc.number_button_click("0")
+    calc.close_parenthesis_click()
+    calc.operation_click("+")
+    calc.number_button_click("5")
+    calc.equals_click()
+
+    # Debe mostrar error y limpiar
+    assert calc.current_value == ""
+    assert calc.expression == ""
+    assert calc.use_expression_mode == False
 
     root.destroy()
 
