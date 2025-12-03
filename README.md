@@ -4,7 +4,7 @@
 [![Python 3.12+](https://img.shields.io/badge/python-3.12+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-Proyecto colaborativo para practicar flujo de trabajo en equipo usando **Python**. Calculadora con interfaz gráfica (GUI), interfaz de línea de comandos (CLI), testing automatizado y CI/CD.
+Proyecto colaborativo para practicar flujo de trabajo en equipo usando **Python**.Calculadora con interfaz gráfica (GUI), interfaz de línea de comandos (CLI), testing automatizado y CI/CD.
 
 ---
 
@@ -17,7 +17,7 @@ Proyecto colaborativo para practicar flujo de trabajo en equipo usando **Python*
 
 ---
 
-## ✨ Características v2.0.0
+## ✨ Características v2.1.0
 
 ### 🖥️ Interfaz Gráfica (GUI)
 
@@ -26,15 +26,17 @@ Proyecto colaborativo para practicar flujo de trabajo en equipo usando **Python*
 - **Display de alta resolución** para números y resultados
 - **Soporte completo de teclado** + mouse
 - **Funciones científicas** integradas (abs, max, min)
-- **Manejo visual de errores**
+- **Operaciones con paréntesis** para expresiones complejas ✨ **NUEVO**
+- **Manejo visual de errores** mejorado con validaciones específicas
 
 ### ⌨️ Atajos de Teclado
 
 | Tecla               | Acción                  |
 | ------------------- | ----------------------- |
 | `0-9`               | Ingresar dígitos        |
-| `. `                | Punto decimal           |
+| `.`                 | Punto decimal           |
 | `+` `-` `*` `/` `^` | Operaciones matemáticas |
+| `(` `)`             | Paréntesis ✨ **NUEVO** |
 | `Enter` o `=`       | Calcular resultado      |
 | `Escape`            | Limpiar display (Clear) |
 | `Backspace`         | Borrar último carácter  |
@@ -49,6 +51,7 @@ Proyecto colaborativo para practicar flujo de trabajo en equipo usando **Python*
 
 - Tests unitarios con **pytest**
 - Tests de GUI con mocks de Tkinter
+- **63+ tests unitarios** incluyendo 13 tests nuevos de paréntesis
 - Ejecutable sin interfaz gráfica (headless)
 - Ideal para CI/CD
 
@@ -75,7 +78,7 @@ git clone https://github.com/WorkTeam01/team-practice.git
 cd team-practice
 
 # Instalar dependencias
-pip install pytest
+pip install -r requirements.txt
 ```
 
 ### Ejecutar la Aplicación
@@ -83,13 +86,13 @@ pip install pytest
 #### Interfaz Gráfica (GUI)
 
 ```bash
-python gui.py
+python src/gui.py
 ```
 
 #### Interfaz de Línea de Comandos (CLI)
 
 ```bash
-python main.py
+python src/cli.py
 ```
 
 ### Ejecutar Tests
@@ -99,13 +102,16 @@ python main.py
 pytest -v
 
 # Tests de calculadora básica
-pytest test_calculator.py -v
+pytest tests/test_calculator.py -v
 
 # Tests de GUI
-pytest test_gui_calculator.py -v
+pytest tests/test_gui.py -v
+
+# Tests específicos de paréntesis
+pytest tests/test_gui.py -k "parenthesis" -v
 
 # Tests con cobertura
-pytest --cov=.  -v
+pytest --cov=src -v
 ```
 
 ---
@@ -114,22 +120,30 @@ pytest --cov=.  -v
 
 ```
 team-practice/
-├── calculator. py              # Lógica de operaciones matemáticas
-├── main.py                    # CLI - Interfaz de línea de comandos
-├── gui.py                     # GUI - Interfaz gráfica con tkinter
-├── test_calculator.py         # Tests unitarios de calculator. py
-├── test_gui_calculator.py     # Tests de la interfaz gráfica
-├── conftest.py                # Fixtures de pytest (mocks de Tkinter)
+├── src/                       # Código fuente
+│   ├── __init__.py
+│   ├── calculator.py          # Lógica de operaciones matemáticas
+│   ├── cli.py                 # CLI - Interfaz de línea de comandos
+│   └── gui.py                 # GUI - Interfaz gráfica con tkinter
+├── tests/                     # Tests
+│   ├── __init__.py
+│   ├── conftest.py            # Fixtures de pytest (mocks de Tkinter)
+│   ├── test_calculator.py     # Tests unitarios de calculator.py
+│   └── test_gui.py            # Tests de la interfaz gráfica
 ├── .github/
 │   ├── workflows/
-│   │   └── ci.yml            # Pipeline de CI/CD
-│   ├── ISSUE_TEMPLATE/       # Plantillas para issues
+│   │   └── ci.yml             # Pipeline de CI/CD
+│   ├── ISSUE_TEMPLATE/        # Plantillas para issues
 │   ├── PULL_REQUEST_TEMPLATE/ # Plantillas para PRs
 │   ├── pull_request_template.md
 │   └── REVIEW_COMMENTS.md
+├── docs/                      # Documentación
+│   ├── USER_GUIDE.md
+│   └── screenshots/
 ├── README.md                  # Este archivo
 ├── CHANGELOG.md               # Historial de cambios
 ├── LICENSE                    # Licencia MIT
+├── requirements.txt           # Dependencias del proyecto
 └── .gitignore                 # Archivos ignorados por Git
 ```
 
@@ -145,6 +159,24 @@ team-practice/
 - ➗ **División**: `a / b`
 - 🔢 **Potencia**: `a ^ b`
 
+### Expresiones con Paréntesis ✨ **NUEVO v2.1.0**
+
+- 🔢 **Expresiones complejas**: `(2+3)*4`, `2*(3+4)`, `((2+3)*4)/5`
+- 📊 **Paréntesis anidados**: Múltiples niveles de paréntesis soportados
+- ⌨️ **Entrada flexible**: Desde teclado o botones
+- ✅ **Validación automática**: Paréntesis balanceados y caracteres seguros
+
+**Ejemplos de uso:**
+
+```
+(2+3)*4 = 20
+2*(3+4) = 14
+(5-2)*(6+4) = 30
+((2+3)*4)/5 = 4
+(10/2)+5 = 10
+(2+3)^2 = 25
+```
+
 ### Funciones Científicas
 
 - `abs(x)` - Valor absoluto
@@ -154,32 +186,35 @@ team-practice/
 ### Manejo de Errores
 
 - ⚠️ División por cero detectada y manejada
+- ⚠️ Paréntesis desbalanceados detectados ✨ **NUEVO**
+- ⚠️ Raíces pares de números negativos (evita números complejos) ✨ **NUEVO**
+- ⚠️ Decimales negativos con autocompletado mejorado ✨ **NUEVO**
 - 🛡️ Validación de entrada en ambas interfaces
-- 📢 Mensajes de error claros
+- 📢 Mensajes de error claros y específicos
 
 ---
 
 ## 🤝 Flujo de Trabajo Colaborativo
 
-### 1. Antes de comenzar
+### 1.Antes de comenzar
 
 ```bash
-# Actualizar rama main
-git checkout main
-git pull origin main
+# Actualizar rama dev
+git checkout dev
+git pull origin dev
 
 # Crear rama para tu feature
 git checkout -b feature/nombre-descriptivo
 ```
 
-### 2. Durante el desarrollo
+### 2.Durante el desarrollo
 
 - ✅ Commits frecuentes y descriptivos
 - ✅ Seguir [Conventional Commits](https://www.conventionalcommits.org/)
 - ✅ Escribir tests para nuevas funcionalidades
 - ✅ Ejecutar tests localmente antes de push
 
-### 3. Al finalizar
+### 3.Al finalizar
 
 ```bash
 # Push de tu rama
@@ -202,11 +237,11 @@ tipo: descripción breve
 Descripción más detallada si es necesario
 
 Ejemplos:
-feat: agregar soporte de teclado para calculadora
-fix: corregir división por cero
-docs: actualizar instrucciones de instalación
-test: agregar tests para botones numéricos
-refactor: eliminar lógica redundante en operadores
+feat: agregar soporte de paréntesis en calculadora
+fix: corregir validación de decimales negativos
+docs: actualizar README con nuevas características
+test: agregar tests para paréntesis anidados
+refactor: reorganizar estructura del proyecto
 ```
 
 **Tipos de commit:**
@@ -234,45 +269,49 @@ refactor: eliminar lógica redundante en operadores
 
 ### Proceso de Contribución
 
-1. **Asigna o crea un issue** usando las plantillas proporcionadas
-   - Para bugs: usa la plantilla de "reporte de error"
-   - Para nuevas funciones: usa la plantilla de "nueva funcionalidad"
-2. **Crea tu rama** desde `dev` (no desde `main`)
+1.**Asigna o crea un issue** usando las plantillas proporcionadas
 
-   ```bash
-   git checkout dev
-   git pull origin dev
-   git checkout -b feature/mi-funcionalidad
-   ```
+- Para bugs: usa la plantilla de "reporte de error"
+- Para nuevas funciones: usa la plantilla de "nueva funcionalidad"
 
-3. **Implementa tu cambio**
+  2.**Crea tu rama** desde `dev` (no desde `main`)
+
+```bash
+git checkout dev
+git pull origin dev
+git checkout -b feature/mi-funcionalidad
+```
+
+3.**Implementa tu cambio**
 
 - Escribe código limpio y documentado
 - Sigue las convenciones del proyecto
 
-4. **Agrega tests** si aplica
+  4.**Agrega tests** si aplica
 
-   ```bash
-   # Ejecutar tests localmente
-   pytest -v
-   ```
+  ```bash
+  # Ejecutar tests localmente
+  pytest -v
+  ```
 
-5. **Actualiza documentación** si es necesario
+  5.**Actualiza documentación** si es necesario
 
-   - README.md
-   - Docstrings en el código
-   - CHANGELOG.md (si es un cambio significativo)
+  - README.md
+  - Docstrings en el código
+  - CHANGELOG.md (si es un cambio significativo)
 
-6. **Crea Pull Request** usando la plantilla de PR
+    6.**Crea Pull Request** usando la plantilla de PR
 
-   - Describe claramente los cambios
-   - Referencia el issue relacionado
-   - Agrega capturas de pantalla si hay cambios visuales
+  - Describe claramente los cambios
+  - Referencia el issue relacionado
+  - Agrega capturas de pantalla si hay cambios visuales
 
-7. **Espera code review**
-   - Responde a los comentarios
-   - Realiza los cambios solicitados
-8. **Mergea** después de aprobación del equipo
+    7.**Espera code review**
+
+  - Responde a los comentarios
+  - Realiza los cambios solicitados
+
+    8.**Mergea** después de aprobación del equipo
 
 ---
 
@@ -280,7 +319,7 @@ refactor: eliminar lógica redundante en operadores
 
 El proyecto sigue **[Versionamiento Semántico](https://semver.org/)**:
 
-### Versión Actual: **v2.0.0** 🎉
+### Versión Actual: **v2.1.0** 🎉
 
 **Changelog completo:**
 
@@ -288,6 +327,7 @@ El proyecto sigue **[Versionamiento Semántico](https://semver.org/)**:
 
 **Versiones disponibles:**
 
+- **v2.1.0** (2025-12-03) - Paréntesis + Reorganización + Bug fixes
 - **v2.0.0** (2025-11-28) - Interfaz gráfica + Testing + CI/CD
 - **v1.0.0** (2025-11-04) - Calculadora CLI básica
 
@@ -302,11 +342,14 @@ El proyecto sigue **[Versionamiento Semántico](https://semver.org/)**:
 pytest -v
 
 # Tests específicos
-pytest test_calculator.py -v
-pytest test_gui_calculator.py -v
+pytest tests/test_calculator.py -v
+pytest tests/test_gui.py -v
+
+# Tests de paréntesis
+pytest tests/test_gui.py -k "parenthesis" -v
 
 # Con cobertura
-pytest --cov=. --cov-report=html -v
+pytest --cov=src --cov-report=html -v
 
 # Tests en modo verbose con detalles
 pytest -vv
@@ -314,9 +357,9 @@ pytest -vv
 
 ### Estructura de Tests
 
-- **`test_calculator.py`**: Tests de lógica matemática
-- **`test_gui_calculator.py`**: Tests de interfaz gráfica
-- **`conftest.py`**: Fixtures y mocks de Tkinter
+- **`tests/test_calculator.py`**: Tests de lógica matemática
+- **`tests/test_gui.py`**: Tests de interfaz gráfica (63+ tests)
+- **`tests/conftest.py`**: Fixtures y mocks de Tkinter
 
 ---
 
@@ -382,15 +425,14 @@ git branch -d feature/mi-rama
 
 ---
 
-## 🚧 Próximas Características (v2.1.0)
+## 🚧 Próximas Características (v3.0.0)
 
-- [ ] Soporte de operaciones con paréntesis (#44)
-- [ ] Fix: Manejo de números decimales negativos (#49)
-- [ ] Fix: Raíces pares de números negativos (#50)
 - [ ] Historial de operaciones
 - [ ] Más funciones matemáticas (√, log, sin, cos, tan)
 - [ ] Temas personalizables (claro/oscuro)
 - [ ] Exportar historial de cálculos
+- [ ] Modo científico avanzado
+- [ ] Gráficos de funciones
 
 ---
 
@@ -398,15 +440,15 @@ git branch -d feature/mi-rama
 
 Este proyecto fue desarrollado colaborativamente por:
 
-- **[@Jandres25](https://github.com/Jandres25)** - Coordinador, GUI, CI/CD, Testing
-- **[@Jhos3ph](https://github.com/Jhos3ph)** - Funciones científicas, Lógica, Refactoring
-- **[@alexricardotapiacarita-ai](https://github.com/alexricardotapiacarita-ai)** - Diseño GUI, Documentación
+- **[@Jandres25](https://github.com/Jandres25)** - Coordinador, GUI, CI/CD, Testing, Paréntesis
+- **[@Jhos3ph](https://github.com/Jhos3ph)** - Funciones científicas, Lógica, Refactoring, Bug fixes
+- **[@alexricardotapiacarita-ai](https://github.com/alexricardotapiacarita-ai)** - Diseño GUI, Documentación, UX
 
 ---
 
 ## 📄 Licencia
 
-Este proyecto está bajo la Licencia MIT. Ver [LICENSE](LICENSE) para más detalles.
+Este proyecto está bajo la Licencia MIT.Ver [LICENSE](LICENSE) para más detalles.
 
 ---
 
@@ -416,12 +458,14 @@ Este proyecto está bajo la Licencia MIT. Ver [LICENSE](LICENSE) para más detal
 - **Framework GUI**: Tkinter
 - **Framework Testing**: Pytest
 - **CI/CD**: GitHub Actions
-- **Commits**: 60+
-- **Pull Requests**: 24+
-- **Issues Cerradas**: 15+
+- **Commits**: 75+
+- **Pull Requests**: 35+
+- **Issues Cerradas**: 22+
+- **Tests**: 63+ tests unitarios
+- **Cobertura**: Alta cobertura de código
 
 ---
 
-**¡Happy coding y colaboración efectiva! ** 🐍✨🚀
+**¡Happy coding y colaboración efectiva!** 🐍✨🚀
 
 Para más información, consulta el [CHANGELOG.md](CHANGELOG.md) para ver el historial completo de cambios.

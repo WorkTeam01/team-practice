@@ -7,6 +7,152 @@ y este proyecto se adhiere a [Semantic Versioning](https://semver.org/spec/v2.0.
 
 ---
 
+## [2.1.0] - 2025-12-03
+
+### 🎉 Minor Release - Operaciones con Paréntesis + Reorganización de Proyecto
+
+Este release introduce soporte completo para expresiones matemáticas con paréntesis, reorganiza la estructura del proyecto siguiendo mejores prácticas de Python, y corrige bugs importantes relacionados con números complejos y decimales negativos.
+
+### Agregado
+
+#### Operaciones con Paréntesis (#44, #56)
+
+- **Soporte completo de paréntesis** en la calculadora GUI
+  - Evaluación de expresiones matemáticas complejas: `(2+3)*4`, `2*(3+4)`, `((2+3)*4)/5`
+  - Botones funcionales `(` y `)` en la interfaz
+  - Entrada de paréntesis desde teclado
+  - Validación de paréntesis balanceados
+  - Validación de caracteres seguros con regex
+  - Modo de expresión automático al usar paréntesis
+  - Compatibilidad con modo normal (sin paréntesis)
+  - Soporte para decimales y números negativos en expresiones
+  - Paréntesis anidados soportados
+
+#### Testing de Paréntesis
+
+- **13 tests unitarios nuevos** para funcionalidad de paréntesis (#56)
+  - Tests de operaciones básicas con paréntesis
+  - Tests de paréntesis anidados
+  - Tests con decimales y números negativos
+  - Tests con potencias
+  - Tests de validación de paréntesis desbalanceados
+  - Tests de modo de expresión
+  - Tests de compatibilidad entre modos
+  - Tests de división por cero en expresiones
+  - Tests de actualización del display
+
+#### Reorganización del Proyecto (#53, #54)
+
+- **Nueva estructura de carpetas** profesional
+  - Carpeta `src/` para código fuente
+    - `src/calculator.py` - Lógica matemática
+    - `src/cli.py` - Interfaz de línea de comandos (renombrado desde main.py)
+    - `src/gui.py` - Interfaz gráfica
+    - `src/__init__.py` - Paquete Python
+  - Carpeta `tests/` para tests
+    - `tests/test_calculator.py`
+    - `tests/test_gui.py` (renombrado desde test_gui_calculator.py)
+    - `tests/conftest.py`
+    - `tests/__init__.py`
+  - Archivo `requirements.txt` para gestión de dependencias
+- **Mejor escalabilidad** y organización del código
+- **Imports mejorados** con estructura de paquetes
+- **Comandos actualizados**: `python src/gui.py`, `python src/cli.py`
+
+### Corregido
+
+#### Raíces Pares de Números Negativos (#50, #57)
+
+- **Fix: Evitar resultados complejos** en raíces pares negativas
+  - Validación en `calculator.py` para detectar raíces pares de negativos
+  - Lanza `ValueError` con mensaje "Raíz negativa"
+  - Captura del error en GUI con mensaje claro "⚠️ Raíz negativa"
+  - Tests unitarios para verificar el comportamiento
+  - Ejemplo: `-2 ^ 0.5` ahora muestra error en lugar de `1.414j`
+  - Algoritmo: valida si `1/exponent` es par para detectar raíces pares
+
+#### Manejo de Decimales Negativos (#49, #55)
+
+- **Mejora de UX** en entrada de decimales negativos
+  - Autocompletado de `-0.` al presionar `.` después de `-`
+  - Validación mejorada para evitar números incompletos como `-.`
+  - Comportamiento consistente: `"-"` + `"."` → `"-0."`
+  - Ejemplo: `-.3` ahora se autocompleta a `-0.3`
+  - Mejor experiencia de usuario y consistencia
+
+### Mejorado
+
+- **Evaluación de expresiones** con validación de seguridad usando regex
+- **Manejo de errores** más robusto con mensajes específicos
+- **Display de GUI** actualizado correctamente en modo expresión
+- **Backspace** funciona en ambos modos (normal y expresión)
+- **Clear** resetea correctamente el modo de expresión
+- **Estructura del proyecto** más profesional y escalable
+- **Imports** más claros y mantenibles
+
+### Técnico
+
+**Paréntesis:**
+
+- Implementación de `open_parenthesis_click()` y `close_parenthesis_click()`
+- Variable `expression` para construir expresiones completas
+- Variable `use_expression_mode` para detectar uso de paréntesis
+- Validación con regex `^[\d\s\+\-\*\/\^\(\)\.]+$`
+- Conversión de `^` a `**` para evaluación de potencias
+- Evaluación segura con `eval()` después de validaciones
+- Manejo de excepciones: `SyntaxError`, `ZeroDivisionError`
+
+**Reorganización:**
+
+- Migración de archivos a `src/` y `tests/`
+- Actualización de imports relativos
+- Creación de `__init__.py` en paquetes
+- `requirements.txt` con `pytest>=7.0.0`
+
+**Validaciones:**
+
+- Detección de raíces pares con algoritmo de inversión de exponente
+- Validación de decimales negativos en `decimal_click()`
+
+### Issues y PRs Incluidas
+
+**Issues Completadas:**
+
+- #44 - Soporte de operaciones con paréntesis en la calculadora GUI
+- #50 - Error: Raíces pares de números negativos generan resultados complejos
+- #49 - Error: Manejo confuso de números decimales negativos
+- #53 - Mejora: reorganizar estructura del proyecto
+
+**Pull Requests Mergeados:**
+
+- #57 - fix: evitar resultados complejos para raíces pares negativas (2025-12-03)
+- #56 - feat: implementar soporte de paréntesis en calculadora (2025-12-02)
+- #55 - Fix: Corrección del comportamiento del decimal después del signo menos (2025-12-01)
+- #54 - refactor: reorganizar estructura del proyecto (src/, tests/, requirements.txt) (2025-11-30)
+
+### Agradecimientos
+
+Este release fue posible gracias a las contribuciones de:
+
+- **@Jandres25** (Jose Andres Meneces Lopez)
+
+  - Implementación de soporte de paréntesis (#56)
+  - 13 tests unitarios para paréntesis
+  - Reorganización de estructura del proyecto (#54)
+  - Coordinación del release v2.1.0
+
+- **@Jhos3ph**
+
+  - Fix de raíces pares negativas (#57)
+  - Validación de números complejos
+  - Tests unitarios para validación
+
+- **@alexricardotapiacarita-ai**
+  - Fix de manejo de decimales negativos (#55)
+  - Mejoras de UX en entrada de números
+
+---
+
 ## [2.0.0] - 2025-11-28
 
 ### 🎉 Major Release - Interfaz Gráfica + Testing Automatizado
@@ -201,14 +347,12 @@ Este release fue posible gracias a las contribuciones de:
 
 ---
 
-## [Próximamente] - v2.1.0
+## [Próximamente] - v3.0.0
 
 ### Planeado
 
-- Soporte de operaciones con paréntesis en GUI (#44)
-- Fix: Manejo de números decimales negativos (#49)
-- Fix: Raíces pares de números negativos (#50)
 - Historial de operaciones
 - Más funciones matemáticas (raíz cuadrada, logaritmos, trigonometría)
 - Temas personalizables (claro/oscuro)
 - Exportar historial de cálculos
+- Modo científico avanzado
