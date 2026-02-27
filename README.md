@@ -1,3 +1,5 @@
+<div align="center">
+
 # Team Practice — Calculadora con GUI
 
 [![CI/CD](https://github.com/WorkTeam01/team-practice/actions/workflows/ci.yml/badge.svg)](https://github.com/WorkTeam01/team-practice/actions/workflows/ci.yml)
@@ -5,6 +7,8 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 Calculadora colaborativa con interfaz gráfica (GUI) e interfaz de línea de comandos (CLI), desarrollada en Python con testing automatizado y pipeline de CI/CD. El proyecto sirve como entorno de práctica para flujo de trabajo en equipo, Git Flow y buenas prácticas de desarrollo.
+
+</div>
 
 ---
 
@@ -178,14 +182,20 @@ El proyecto sigue [versionamiento semántico](https://semver.org/). Ver [CHANGEL
 
 ---
 
+<div align="center">
+
 ## Autores
 
-- [@Jandres25](https://github.com/Jandres25) — Coordinador, GUI, CI/CD, testing, paréntesis
-- [@Jhos3ph](https://github.com/Jhos3ph) — Funciones científicas, lógica, refactoring, bug fixes
-- [@alexricardotapiacarita-ai](https://github.com/alexricardotapiacarita-ai) — Diseño GUI, documentación, UX
+[@Jandres25](https://github.com/Jandres25) — Coordinador, GUI, CI/CD, testing, paréntesis
+&nbsp;·&nbsp;
+[@Jhos3ph](https://github.com/Jhos3ph) — Funciones científicas, lógica, refactoring, bug fixes
+&nbsp;·&nbsp;
+[@alexricardotapiacarita-ai](https://github.com/alexricardotapiacarita-ai) — Diseño GUI, documentación, UX
 
 ---
 
 ## Licencia
 
 Este proyecto está bajo la [Licencia MIT](LICENSE).
+
+</div>
