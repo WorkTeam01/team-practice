@@ -1,14 +1,28 @@
 <div align="center">
 
-# Team Practice — Calculadora con GUI
+# Calculadora Python — GUI + CLI
 
 [![CI/CD](https://github.com/WorkTeam01/team-practice/actions/workflows/ci.yml/badge.svg)](https://github.com/WorkTeam01/team-practice/actions/workflows/ci.yml)
 [![Python 3.12+](https://img.shields.io/badge/python-3.12+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-Calculadora colaborativa con interfaz gráfica (GUI) e interfaz de línea de comandos (CLI), desarrollada en Python con testing automatizado y pipeline de CI/CD. El proyecto sirve como entorno de práctica para flujo de trabajo en equipo, Git Flow y buenas prácticas de desarrollo.
+Calculadora con interfaz gráfica (tkinter) e interfaz de línea de comandos, escrita en Python. Soporta operaciones básicas, funciones científicas y expresiones con paréntesis anidados. Incluye suite de tests automatizados y pipeline de CI/CD.
 
 </div>
+
+---
+
+## Capturas
+
+<div align="center">
+
+![Calculadora GUI](docs/screenshots/screenshot-calculator.png)
+
+</div>
+
+|                       Operaciones básicas                        |                        Funciones científicas                         |                 Manejo de errores                 |
+| :--------------------------------------------------------------: | :------------------------------------------------------------------: | :-----------------------------------------------: |
+| ![Operaciones básicas](docs/screenshots/operaciones-basicas.gif) | ![Funciones científicas](docs/screenshots/calculator-scientific.gif) | ![Errores](docs/screenshots/calculator-error.gif) |
 
 ---
 
@@ -27,11 +41,13 @@ pip install -r requirements.txt
 ## Uso
 
 **Interfaz gráfica:**
+
 ```bash
 python src/gui.py
 ```
 
 **Línea de comandos:**
+
 ```bash
 python src/cli.py
 ```
@@ -42,13 +58,13 @@ python src/cli.py
 
 ### Básicas
 
-| Operación      | Sintaxis  |
-| -------------- | --------- |
-| Suma           | `a + b`   |
-| Resta          | `a - b`   |
-| Multiplicación | `a * b`   |
-| División       | `a / b`   |
-| Potencia       | `a ^ b`   |
+| Operación      | Sintaxis |
+| -------------- | -------- |
+| Suma           | `a + b`  |
+| Resta          | `a - b`  |
+| Multiplicación | `a * b`  |
+| División       | `a / b`  |
+| Potencia       | `a ^ b`  |
 
 ### Expresiones con paréntesis
 
@@ -64,25 +80,25 @@ Soporta expresiones complejas con paréntesis anidados:
 
 ### Funciones científicas
 
-| Función     | Descripción                         |
-| ----------- | ----------------------------------- |
-| `abs(x)`    | Valor absoluto                      |
-| `max(a, b)` | Valor máximo entre dos números      |
-| `min(a, b)` | Valor mínimo entre dos números      |
+| Función     | Descripción                    |
+| ----------- | ------------------------------ |
+| `abs(x)`    | Valor absoluto                 |
+| `max(a, b)` | Valor máximo entre dos números |
+| `min(a, b)` | Valor mínimo entre dos números |
 
 ---
 
 ## Atajos de teclado (GUI)
 
-| Tecla                   | Acción                  |
-| ----------------------- | ----------------------- |
-| `0-9`                   | Ingresar dígitos        |
-| `.`                     | Punto decimal           |
-| `+`  `-`  `*`  `/`  `^` | Operadores matemáticos  |
-| `(`  `)`                | Paréntesis              |
-| `Enter` / `=`           | Calcular resultado      |
-| `Escape`                | Limpiar display         |
-| `Backspace`             | Borrar último carácter  |
+| Tecla               | Acción                 |
+| ------------------- | ---------------------- |
+| `0-9`               | Ingresar dígitos       |
+| `.`                 | Punto decimal          |
+| `+` `-` `*` `/` `^` | Operadores matemáticos |
+| `(` `)`             | Paréntesis             |
+| `Enter` / `=`       | Calcular resultado     |
+| `Escape`            | Limpiar display        |
+| `Backspace`         | Borrar último carácter |
 
 ---
 
@@ -136,14 +152,14 @@ El proyecto sigue **Git Flow** con **Conventional Commits**.
 
 ### Ramas
 
-| Rama                       | Propósito                                  |
-| -------------------------- | ------------------------------------------ |
-| `main`                     | Producción (siempre estable)               |
-| `dev`                      | Integración de features                    |
-| `feature/nombre`           | Nuevas funcionalidades                     |
-| `bugfix/descripcion`       | Corrección de errores                      |
-| `hotfix/descripcion`       | Correcciones urgentes en producción        |
-| `release/vX.Y.Z`           | Preparación de releases                    |
+| Rama                 | Propósito                           |
+| -------------------- | ----------------------------------- |
+| `main`               | Producción (siempre estable)        |
+| `dev`                | Integración de features             |
+| `feature/nombre`     | Nuevas funcionalidades              |
+| `bugfix/descripcion` | Corrección de errores               |
+| `hotfix/descripcion` | Correcciones urgentes en producción |
+| `release/X.Y.Z`      | Preparación de releases             |
 
 ### Formato de commits
 
@@ -154,6 +170,7 @@ Tipos: feat | fix | docs | test | refactor | style | chore
 ```
 
 **Ejemplos:**
+
 ```
 feat: agregar soporte de paréntesis en calculadora
 fix: corregir validación de decimales negativos
@@ -174,27 +191,21 @@ test: agregar tests para paréntesis anidados
 
 El proyecto sigue [versionamiento semántico](https://semver.org/). Ver [CHANGELOG.md](CHANGELOG.md) para el historial completo.
 
-| Versión    | Fecha       | Cambios principales                         |
-| ---------- | ----------- | ------------------------------------------- |
-| **v2.1.0** | 2025-12-03  | Soporte de paréntesis, reorganización, fixes|
-| **v2.0.0** | 2025-11-28  | Interfaz gráfica, testing, CI/CD            |
-| **v1.0.0** | 2025-11-04  | Calculadora CLI básica                      |
+| Versión   | Fecha      | Cambios principales                          |
+| --------- | ---------- | -------------------------------------------- |
+| **2.1.0** | 2025-12-03 | Soporte de paréntesis, reorganización, fixes |
+| **2.0.0** | 2025-11-28 | Interfaz gráfica, testing, CI/CD             |
+| **1.0.0** | 2025-11-04 | Calculadora CLI básica                       |
+
+---
+
+## Contribuciones
+
+Las contribuciones son bienvenidas. Consulta [CONTRIBUTING.md](CONTRIBUTING.md) para conocer el flujo de trabajo, convenciones de commits y proceso de Pull Request.
 
 ---
 
 <div align="center">
-
-## Autores
-
-[@Jandres25](https://github.com/Jandres25) — Coordinador, GUI, CI/CD, testing, paréntesis
-&nbsp;·&nbsp;
-[@Jhos3ph](https://github.com/Jhos3ph) — Funciones científicas, lógica, refactoring, bug fixes
-&nbsp;·&nbsp;
-[@alexricardotapiacarita-ai](https://github.com/alexricardotapiacarita-ai) — Diseño GUI, documentación, UX
-
----
-
-## Licencia
 
 Este proyecto está bajo la [Licencia MIT](LICENSE).
 
